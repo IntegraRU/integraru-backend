@@ -5,7 +5,7 @@ import br.edu.ufcg.integra_ru.mapper.CardapioMapper;
 import br.edu.ufcg.integra_ru.models.Cardapio;
 import br.edu.ufcg.integra_ru.models.ItemCardapio;
 import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
-import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontrado;
+import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class CardapioService {
             cardapioRepository.deleteById(id);
         }
         catch (EmptyResultDataAccessException erdae){
-            throw new RecursoNaoEncontrado("Cardápio com id " + id + " não encontrado!");
+            throw new RecursoNaoEncontradoExcecao("Cardápio com id " + id + " não encontrado!");
         }
     }
 
@@ -59,7 +59,7 @@ public class CardapioService {
             return  cardapioMapper.toDTO(found);
         }
         catch (EntityNotFoundException enfe){
-            throw new RecursoNaoEncontrado("Cardápio com id " + id + " não encontrado!");
+            throw new RecursoNaoEncontradoExcecao("Cardápio com id " + id + " não encontrado!");
         }
     }
 
