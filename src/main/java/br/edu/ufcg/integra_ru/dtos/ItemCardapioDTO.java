@@ -12,4 +12,5 @@ public class ItemCardapioDTO {
     private Long id;
 
     private String nome;
+
 }

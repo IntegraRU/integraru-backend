@@ -22,4 +22,8 @@ public class ItemCardapio {
     private Cardapio cardapio;
 
     private String nome;
+
+    public ItemCardapio(String nome) {
+        this.nome = nome;
+    }
 }

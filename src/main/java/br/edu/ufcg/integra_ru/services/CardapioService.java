@@ -1,9 +1,7 @@
 package br.edu.ufcg.integra_ru.services;
 
 import br.edu.ufcg.integra_ru.dtos.CardapioDTO;
-import br.edu.ufcg.integra_ru.dtos.ItemCardapioDTO;
 import br.edu.ufcg.integra_ru.mapper.CardapioMapper;
-import br.edu.ufcg.integra_ru.mapper.ItemCardapioMapper;
 import br.edu.ufcg.integra_ru.models.Cardapio;
 import br.edu.ufcg.integra_ru.models.ItemCardapio;
 import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
@@ -23,13 +21,12 @@ public class CardapioService {
     @Autowired
     private CardapioRepository cardapioRepository;
     private CardapioMapper cardapioMapper = CardapioMapper.INSTANCE;
-    private ItemCardapioMapper itemCardapioMapper = ItemCardapioMapper.INSTANCE;
 
     @Transactional
     public CardapioDTO saveMenu(CardapioDTO dto){
         Cardapio model = cardapioMapper.toModel(dto);
-        for(ItemCardapioDTO icd : dto.getItens()){
-            ItemCardapio itemCardapio = itemCardapioMapper.toModel(icd);
+        for(String nomeItem : dto.getItens()){
+            ItemCardapio itemCardapio = new ItemCardapio(nomeItem);
             model.addItem(itemCardapio);
         }
         return cardapioMapper.toDTO(cardapioRepository.save(model));
@@ -57,7 +54,7 @@ public class CardapioService {
             found.setNome(dto.getNome());
             found.setTipo(dto.getTipo());
             found.clearItens();
-            dto.getItens().forEach(i -> found.addItem(itemCardapioMapper.toModel(i)));
+            dto.getItens().forEach(i -> found.addItem(new ItemCardapio(i)));
             cardapioRepository.save(found);
             return  cardapioMapper.toDTO(found);
         }
