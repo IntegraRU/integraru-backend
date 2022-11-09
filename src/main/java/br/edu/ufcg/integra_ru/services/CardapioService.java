@@ -63,4 +63,9 @@ public class CardapioService {
         }
     }
 
+    public CardapioDTO getMenuById(Long id) {
+        Cardapio menu = cardapioRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Cardápio com o id " + id + " não encontrado!"));
+        return cardapioMapper.toDTO(menu);
+    }
 }

@@ -36,6 +36,11 @@ public class CardapioController {
         return cardapioService.getMenu();
     }
 
+    @GetMapping("/{id}")
+    public CardapioDTO getMenuById(@PathVariable Long id){
+        return cardapioService.getMenuById(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteMenu(@PathVariable Long id){
         cardapioService.deleteMenu(id);
