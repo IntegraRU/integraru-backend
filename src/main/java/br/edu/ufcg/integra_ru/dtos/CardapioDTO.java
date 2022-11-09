@@ -23,7 +23,7 @@ public class CardapioDTO {
     private String nome;
 
     @NotNull
-    private Set<String> itens = new HashSet<>();
+    private Set<ItemCardapioDTO> itens = new HashSet<>();
 
     private String urlImagem;
 }

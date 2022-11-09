@@ -2,6 +2,7 @@ package br.edu.ufcg.integra_ru.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(of = {"nome"})
 public class Cardapio {
 
     @Id
@@ -25,16 +27,15 @@ public class Cardapio {
 
     private String urlImagem;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "itens_prato", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "nome")
-    private Set<String> itens = new HashSet<>();
+    @OneToMany(mappedBy = "cardapio", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private Set<ItemCardapio> itens = new HashSet<>();
 
     public void clearItens(){
         itens.clear();
     }
 
-    public void addItem(String item){
+    public void addItem(ItemCardapio item){
         itens.add(item);
+        item.setCardapio(this);
     }
 }
