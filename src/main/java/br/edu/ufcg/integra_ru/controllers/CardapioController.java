@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cardapios")
+@RequestMapping("/api/cardapio")
 public class CardapioController {
 
     @Autowired
