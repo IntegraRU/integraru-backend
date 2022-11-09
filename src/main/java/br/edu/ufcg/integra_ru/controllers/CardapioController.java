@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CardapioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CardapioDTO> saveMenu(@RequestBody CardapioDTO dto){
+    public ResponseEntity<CardapioDTO> saveMenu(@RequestBody @Valid CardapioDTO dto){
 
         dto = cardapioService.saveMenu(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -38,5 +39,10 @@ public class CardapioController {
     @DeleteMapping("/{id}")
     public void deleteMenu(@PathVariable Long id){
         cardapioService.deleteMenu(id);
+    }
+
+    @PutMapping("/{id}")
+    public CardapioDTO updateMenu(@PathVariable Long id, @RequestBody CardapioDTO dto){
+        return cardapioService.updateMenu(id, dto);
     }
 }

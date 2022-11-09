@@ -5,7 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -22,8 +23,18 @@ public class Cardapio {
 
     private String nome;
 
-    @ElementCollection(fetch = FetchType.EAGER) // 1
-    @CollectionTable(name = "itens_prato", joinColumns = @JoinColumn(name = "id")) // 2
-    @Column(name = "nome") // 3
-    private List<String> itens;
+    private String urlImagem;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "itens_prato", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "nome")
+    private Set<String> itens = new HashSet<>();
+
+    public void clearItens(){
+        itens.clear();
+    }
+
+    public void addItem(String item){
+        itens.add(item);
+    }
 }
