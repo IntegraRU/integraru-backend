@@ -1,12 +1,12 @@
 package br.edu.ufcg.integra_ru.models;
 
-public enum TipoCardapio {
+public enum TipoPrato {
 
     COMUM("Menu comum"), VEGANO("Menu vegano"), VEGERATIANO("Menu vegetariano");
 
     private String tipo;
 
-    TipoCardapio(String tipo) {
+    TipoPrato(String tipo) {
         this.tipo = tipo;
     }
 

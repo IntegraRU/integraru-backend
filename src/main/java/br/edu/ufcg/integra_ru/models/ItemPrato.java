@@ -11,19 +11,19 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"cardapio", "nome"})
-public class ItemCardapio {
+@EqualsAndHashCode(of = {"nome", "id"})
+public class ItemPrato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Cardapio cardapio;
+    private Prato prato;
 
     private String nome;
 
-    public ItemCardapio(String nome) {
+    public ItemPrato(String nome) {
         this.nome = nome;
     }
 }

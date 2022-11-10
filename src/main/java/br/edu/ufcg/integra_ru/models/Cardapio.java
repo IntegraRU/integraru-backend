@@ -1,41 +1,50 @@
 package br.edu.ufcg.integra_ru.models;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@EqualsAndHashCode(of = {"nome"})
+@EqualsAndHashCode(of = {"id"})
 public class Cardapio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private TipoCardapio tipo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate dataCardapio;
 
-    private String nome;
+    @OneToMany(mappedBy = "cardapio", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<PratoCardapio> pratos = new ArrayList<>();
 
-    private String urlImagem;
-
-    @OneToMany(mappedBy = "cardapio", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<ItemCardapio> itens = new HashSet<>();
-
-    public void clearItens(){
-        itens.clear();
+    public void addDish(Prato prato){
+        pratos.add(new PratoCardapio(this, prato));
     }
 
-    public void addItem(ItemCardapio item){
-        itens.add(item);
-        item.setCardapio(this);
+    public void removeDish(PratoCardapio dish){
+        pratos.remove(dish);
+    }
+
+    @Override
+    public String toString() {
+        return "Cardapio{" +
+                "id=" + id +
+                ", dataCardapio=" + dataCardapio +
+                ", pratos=" + pratos +
+                '}';
     }
 }
