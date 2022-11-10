@@ -10,4 +10,6 @@ import java.util.List;
 public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Long> {
 
     List<UsuarioDTO> saveUser();
+
+    
 }
