@@ -9,10 +9,12 @@ import br.edu.ufcg.integra_ru.models.Prato;
 import br.edu.ufcg.integra_ru.models.PratoCardapio;
 import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
 import br.edu.ufcg.integra_ru.repositories.PratoRepository;
+import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +33,17 @@ public class CardapioService {
 
     @Transactional
     public CardapioDTO saveMenu(CardapioDTO cardapioDTO){
-        Cardapio toBeSaved = mapper.toModel(cardapioDTO);
-        for(PratoDTO p : cardapioDTO.getPratos()){
-            Prato prato = pratoRepository.getReferenceById(p.getId());
-            toBeSaved.addDish(prato);
+        try {
+            Cardapio toBeSaved = mapper.toModel(cardapioDTO);
+            for (PratoDTO p : cardapioDTO.getPratos()) {
+                Prato prato = pratoRepository.getReferenceById(p.getId());
+                toBeSaved.addDish(prato);
+            }
+            return mapper.toDTO(repository.save(toBeSaved));
         }
-        return mapper.toDTO(repository.save(toBeSaved));
+        catch (EntityNotFoundException enfe){
+            throw new RecursoNaoEncontradoExcecao("Algum(ns) pratos não foram encontrados no sistema!");
+        }
     }
 
     public List<CardapioDTO> getMenu(){
