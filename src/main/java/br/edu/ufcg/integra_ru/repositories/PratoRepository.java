@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PratoRepository extends JpaRepository<Prato, Long> {
 
-    @Query("select c from Prato c join fetch c.itens")
+    @Query("select distinct c from Prato c join fetch c.itens i join fetch i.prato")
     List<Prato> findAllWithItens();
 }

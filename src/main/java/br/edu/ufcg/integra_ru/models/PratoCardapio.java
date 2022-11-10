@@ -1,8 +1,10 @@
 package br.edu.ufcg.integra_ru.models;
 
 import br.edu.ufcg.integra_ru.models.pk.PratoCardapioId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -17,12 +19,12 @@ public class PratoCardapio {
     private PratoCardapioId id = new PratoCardapioId();
 
     @MapsId("cardapioId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardapio_id")
     private Cardapio cardapio;
 
     @MapsId("pratoId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prato_id")
     private Prato prato;
 

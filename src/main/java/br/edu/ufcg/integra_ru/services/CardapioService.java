@@ -6,7 +6,6 @@ import br.edu.ufcg.integra_ru.mapper.CardapioMapper;
 import br.edu.ufcg.integra_ru.mapper.PratoMapper;
 import br.edu.ufcg.integra_ru.models.Cardapio;
 import br.edu.ufcg.integra_ru.models.Prato;
-import br.edu.ufcg.integra_ru.models.PratoCardapio;
 import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
 import br.edu.ufcg.integra_ru.repositories.PratoRepository;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
@@ -46,6 +45,7 @@ public class CardapioService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<CardapioDTO> getMenu(){
         return repository.findAllWithPratos().stream().map(mapper::toDTO).collect(Collectors.toList());
     }
