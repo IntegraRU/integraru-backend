@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class CardapioDTO {
 
     private Long id;
 
-    private List<PratoDTO> pratos;
+    private Set<PratoDTO> pratos;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataCardapio;

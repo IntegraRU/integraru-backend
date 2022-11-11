@@ -3,7 +3,6 @@ package br.edu.ufcg.integra_ru.services;
 import br.edu.ufcg.integra_ru.dtos.CardapioDTO;
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.mapper.CardapioMapper;
-import br.edu.ufcg.integra_ru.mapper.PratoMapper;
 import br.edu.ufcg.integra_ru.models.Cardapio;
 import br.edu.ufcg.integra_ru.models.Prato;
 import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
@@ -28,15 +27,13 @@ public class CardapioService {
 
     private CardapioMapper mapper = CardapioMapper.INSTANCE;
 
-    private PratoMapper pratoMapper = PratoMapper.INSTANCE;
-
     @Transactional
     public CardapioDTO saveMenu(CardapioDTO cardapioDTO){
         try {
             Cardapio toBeSaved = mapper.toModel(cardapioDTO);
             for (PratoDTO p : cardapioDTO.getPratos()) {
-                Prato prato = pratoRepository.getReferenceById(p.getId());
-                toBeSaved.addDish(prato);
+                Prato dish = pratoRepository.getReferenceById(p.getId());
+                toBeSaved.addDish(dish);
             }
             return mapper.toDTO(repository.save(toBeSaved));
         }

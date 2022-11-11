@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CardapioRepository extends JpaRepository<Cardapio, Long> {
 
-    @Query("select distinct c from Cardapio c join fetch c.pratos cp join fetch cp.prato p join fetch p.itens")
+    @Query("select distinct c from Cardapio c join fetch c.pratos cp join fetch cp.prato p join fetch p.itens itens")
     List<Cardapio> findAllWithPratos();
 }
