@@ -43,7 +43,7 @@ public class PratoService {
             pratoRepository.deleteById(id);
         }
         catch (EmptyResultDataAccessException erdae){
-            throw new RecursoNaoEncontradoExcecao("Cardápio com id " + id + " não encontrado!");
+            throw new RecursoNaoEncontradoExcecao("Prato com id " + id + " não encontrado!");
         }
     }
 

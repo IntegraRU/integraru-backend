@@ -9,6 +9,7 @@ import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
 import br.edu.ufcg.integra_ru.repositories.PratoRepository;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,15 @@ public class CardapioService {
     @Transactional(readOnly = true)
     public List<CardapioDTO> getMenu(){
         return repository.findAllWithPratos().stream().map(mapper::toDTO).collect(Collectors.toList());
+    }
+
+    public void deleteMenu(Long id){
+        try{
+            repository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException erdae){
+            throw new RecursoNaoEncontradoExcecao("Cardápio com id " + id + " não encontrado!");
+        }
     }
 
 
