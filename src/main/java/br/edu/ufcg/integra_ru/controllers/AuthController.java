@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
+@RestController("/api")
 public class AuthController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
     private final AuthenticationManager authenticationManager;
@@ -24,7 +24,7 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/token")
+    @PostMapping("/login")
     public String token(@RequestBody JwtRequest jwtRequest){
         Authentication user = authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
         LOG.info("Token requested for user: '{}'", user.getName());
