@@ -22,8 +22,7 @@ public class PratoDTO {
     @NotNull
     private String nome;
 
-    @NotNull
-    private Set<String> itens = new HashSet<>();
+    private String itens;
 
     private String urlImagem;
 }

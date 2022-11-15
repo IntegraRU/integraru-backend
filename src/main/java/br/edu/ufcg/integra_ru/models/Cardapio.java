@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -28,23 +26,21 @@ public class Cardapio {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataCardapio;
 
-    @OneToMany(mappedBy = "cardapio", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    private List<PratoCardapio> pratos = new ArrayList<>();
+    @OneToMany(mappedBy = "cardapio", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Prato> pratos = new ArrayList<>();
 
     public void addDish(Prato prato){
-        pratos.add(new PratoCardapio(this, prato));
+        if(!pratos.contains(prato)){
+            pratos.add(prato);
+            prato.setCardapio(this);
+        }
     }
 
-    public void removeDish(PratoCardapio dish){
-        pratos.remove(dish);
+    public boolean containsDish(Prato prato){
+        return pratos.contains(prato);
     }
 
-    @Override
-    public String toString() {
-        return "Cardapio{" +
-                "id=" + id +
-                ", dataCardapio=" + dataCardapio +
-                ", pratos=" + pratos +
-                '}';
+    public void removeDish(Prato prato) {
+        pratos.remove(prato);
     }
 }

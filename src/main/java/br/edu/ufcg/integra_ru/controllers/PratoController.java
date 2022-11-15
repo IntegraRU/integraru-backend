@@ -3,13 +3,17 @@ package br.edu.ufcg.integra_ru.controllers;
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.services.PratoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,23 +35,28 @@ public class PratoController {
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @GetMapping
-    public List<PratoDTO> getDishes(){
-        return pratoService.getDishes();
-    }
-
-    @GetMapping("/{id}")
-    public PratoDTO getDishById(@PathVariable Long id){
+    @GetMapping(value = "/{id}")
+    public PratoDTO getDishById(@PathVariable(value = "id") Long id){
         return pratoService.getDishById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDish(@PathVariable Long id){
-        pratoService.deleteDish(id);
+    @GetMapping
+    public List<PratoDTO> getDishByDate(@RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
+        return pratoService.getDishByDate(date);
+    }
+
+    @DeleteMapping("/{pratoId}")
+    public void deleteDish(@PathVariable Long pratoId){
+        pratoService.deleteDish(pratoId);
     }
 
     @PutMapping("/{id}")
     public PratoDTO updateDish(@PathVariable Long id, @RequestBody PratoDTO dto){
         return pratoService.updateDish(id, dto);
+    }
+
+    @PatchMapping("/{pratoId}")
+    public PratoDTO patchDish(@PathVariable Long pratoId, @RequestBody PratoDTO pratoDTO) throws InvocationTargetException, IllegalAccessException {
+        return pratoService.patchDish(pratoId, pratoDTO);
     }
 }

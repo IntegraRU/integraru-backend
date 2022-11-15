@@ -1,9 +1,6 @@
 package br.edu.ufcg.integra_ru.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(of = {"nome"})
+@EqualsAndHashCode(of = {"id", "nome"})
 public class Prato {
 
     @Id
@@ -29,15 +26,10 @@ public class Prato {
 
     private String urlImagem;
 
-    @OneToMany(mappedBy = "prato", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private Set<ItemPrato> itens = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ToString.Exclude
+    private Cardapio cardapio;
 
-    public void clearItens(){
-        itens.clear();
-    }
+    private String itens;
 
-    public void addItem(ItemPrato item){
-        itens.add(item);
-        item.setPrato(this);
-    }
 }
