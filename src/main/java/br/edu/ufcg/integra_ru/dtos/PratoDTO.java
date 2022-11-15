@@ -1,5 +1,6 @@
 package br.edu.ufcg.integra_ru.dtos;
 
+import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.TipoPrato;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,9 @@ public class PratoDTO {
 
     @NotNull
     private TipoPrato tipo;
+
+    @NotNull
+    private ModalidadePrato modalidadePrato;
 
     @NotNull
     private String nome;

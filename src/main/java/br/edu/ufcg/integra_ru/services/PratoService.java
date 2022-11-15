@@ -4,8 +4,6 @@ import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.mapper.PratoMapper;
 import br.edu.ufcg.integra_ru.models.Cardapio;
 import br.edu.ufcg.integra_ru.models.Prato;
-import br.edu.ufcg.integra_ru.models.pk.PratoCardapioId;
-import br.edu.ufcg.integra_ru.repositories.CardapioRepository;
 import br.edu.ufcg.integra_ru.repositories.PratoRepository;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;

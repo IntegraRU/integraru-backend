@@ -2,7 +2,6 @@ package br.edu.ufcg.integra_ru.mapper;
 
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.models.Prato;
-import br.edu.ufcg.integra_ru.models.pk.PratoCardapioId;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

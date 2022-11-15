@@ -22,6 +22,9 @@ public class Prato {
     @Enumerated(EnumType.STRING)
     private TipoPrato tipo;
 
+    @Enumerated(EnumType.STRING)
+    private ModalidadePrato modalidadePrato;
+
     private String nome;
 
     private String urlImagem;
