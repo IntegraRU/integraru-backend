@@ -2,14 +2,15 @@ package br.edu.ufcg.integra_ru.controllers;
 
 
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
+import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
+import br.edu.ufcg.integra_ru.util.UserError;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/usuario")
@@ -17,32 +18,37 @@ public class UsuarioController {
 
     private UsuarioService usuarioService;
 
-    @PostMapping
-    public ResponseEntity<UsuarioDTO> create(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{matricula}")
-                .buildAndExpand(usuarioDTO.getMatricula()).toUri();
-
-        return ResponseEntity.created(uri).body(usuarioService.saveUser(usuarioDTO));
-    }
-    @GetMapping
-    public List<UsuarioDTO> getUsuarios(){
-        return usuarioService.getUsers();
-    }
-
-    @GetMapping("/{matricula}")
-    public UsuarioDTO getUsuarioByUser(@PathVariable Long matricula){
-        return usuarioService.getUserByEnroll(matricula);
+    @PostMapping("/matricula")
+    public ResponseEntity<?> saveUser(@RequestBody UsuarioDTO usuarioDTO){
+        Usuario user = usuarioService.saveUser(usuarioDTO);
+        return new ResponseEntity<Usuario>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/{matricula}")
-    public boolean deleteMenu(@PathVariable Long matricula){
-        return usuarioService.deleteUserByEnroll(matricula);
+    public ResponseEntity<?> deleteUser(@PathVariable Long matricula){
+        Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
+        if(user.isEmpty()){
+            return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
+        }
+        usuarioService.deleteUser(user.get());
+        return new ResponseEntity<>(matricula, HttpStatus.OK);
     }
 
-    @PutMapping("/{matricula}")
-    public UsuarioDTO updateMenu(@PathVariable Long matricula, @RequestBody UsuarioDTO dto){
-        return usuarioService.updateUser(matricula, dto);
+    @GetMapping
+    public ResponseEntity<?> listUsers(){
+        List<Usuario> users = usuarioService.getUsers();
+        if(users.isEmpty()){
+            return new ResponseEntity<>(UserError.errorNenhumUsuarioCadastrado(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @GetMapping("/{matricula}")
+    public ResponseEntity<?> getUser(@PathVariable Long matricula){
+        Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
+        if(user.isEmpty()){
+            return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 }

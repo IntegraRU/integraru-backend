@@ -4,7 +4,6 @@ package br.edu.ufcg.integra_ru.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -13,7 +12,6 @@ public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String matricula;
 
     @NotNull()
@@ -24,16 +22,19 @@ public class Usuario implements Serializable {
 
     private String telefone;
 
+    private String urlImagem;
+
     public Usuario() {
 
     }
 
-    public Usuario(String matricula, String nome, String email, String telefone) {
+    public Usuario(String matricula, String nome, String email, String telefone, String urlImagem) {
         super();
         this.matricula = matricula;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+        this.urlImagem = urlImagem;
     }
 
     public String getMatricula() {
@@ -68,15 +69,12 @@ public class Usuario implements Serializable {
         this.telefone = telefone;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Usuario usuario)) return false;
-        return getMatricula().equals(usuario.getMatricula()) && getEmail().equals(usuario.getEmail());
+    public String getUrlImagem() {
+        return urlImagem;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getMatricula(), getEmail());
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
+
 }

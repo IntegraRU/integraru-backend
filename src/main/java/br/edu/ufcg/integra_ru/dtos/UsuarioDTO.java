@@ -19,11 +19,14 @@ public class UsuarioDTO {
 
     private String telefone;
 
-    public UsuarioDTO(String matricula, String nome, String email, String telefone) {
+    private String urlImagem;
+
+    public UsuarioDTO(String matricula, String nome, String email, String telefone, String urlImagem) {
         this.matricula = matricula;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+        this.urlImagem = urlImagem;
     }
 
     public UsuarioDTO(String matricula, String nome, String email) {
@@ -63,5 +66,13 @@ public class UsuarioDTO {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
     }
 }
