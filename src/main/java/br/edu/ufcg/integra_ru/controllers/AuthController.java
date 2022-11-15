@@ -1,6 +1,7 @@
 package br.edu.ufcg.integra_ru.controllers;
 
 import br.edu.ufcg.integra_ru.dtos.JwtRequest;
+import br.edu.ufcg.integra_ru.dtos.JwtResponse;
 import br.edu.ufcg.integra_ru.service.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +28,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String token(@RequestBody JwtRequest jwtRequest){
+    public JwtResponse token(@RequestBody JwtRequest jwtRequest){
         Authentication user = authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
         LOG.info("Token requested for user: '{}'", user.getName());
         String token = tokenService.generateAccessToken((UserDetails) user.getPrincipal());
         LOG.info("Token granted {}", token);
-        return token;
+        return new JwtResponse(token);
     }
 
     private Authentication authenticate(String username, String password){
