@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api")
@@ -28,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public JwtResponse token(@RequestBody JwtRequest jwtRequest){
+    public JwtResponse token(@RequestBody @Valid JwtRequest jwtRequest){
         Authentication user = authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
         LOG.info("Token requested for user: '{}'", user.getName());
         String token = tokenService.generateAccessToken((UserDetails) user.getPrincipal());

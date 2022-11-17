@@ -51,7 +51,7 @@ public class PratoController {
     }
 
     @PutMapping("/{id}")
-    public PratoDTO updateDish(@PathVariable Long id, @RequestBody PratoDTO dto){
+    public PratoDTO updateDish(@PathVariable Long id, @RequestBody @Valid PratoDTO dto){
         return pratoService.updateDish(id, dto);
     }
 
