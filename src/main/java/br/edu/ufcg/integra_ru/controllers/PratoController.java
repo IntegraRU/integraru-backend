@@ -17,13 +17,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/prato")
+@RequestMapping("/api")
 public class PratoController {
 
     @Autowired
     private PratoService pratoService;
 
-    @PostMapping
+    @PostMapping("/prato")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PratoDTO> saveDish(@RequestBody @Valid PratoDTO dto){
 
@@ -35,27 +35,27 @@ public class PratoController {
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/prato/{id}")
     public PratoDTO getDishById(@PathVariable(value = "id") Long id){
         return pratoService.getDishById(id);
     }
 
-    @GetMapping
+    @GetMapping("/pratos")
     public List<PratoDTO> getDishByDate(@RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
         return pratoService.getDishByDate(date);
     }
 
-    @DeleteMapping("/{pratoId}")
+    @DeleteMapping("/prato/{pratoId}")
     public void deleteDish(@PathVariable Long pratoId){
         pratoService.deleteDish(pratoId);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/prato/{id}")
     public PratoDTO updateDish(@PathVariable Long id, @RequestBody @Valid PratoDTO dto){
         return pratoService.updateDish(id, dto);
     }
 
-    @PatchMapping("/{pratoId}")
+    @PatchMapping("/prato/{pratoId}")
     public PratoDTO patchDish(@PathVariable Long pratoId, @RequestBody PratoDTO pratoDTO) throws InvocationTargetException, IllegalAccessException {
         return pratoService.patchDish(pratoId, pratoDTO);
     }
