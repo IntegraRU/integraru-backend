@@ -3,6 +3,7 @@ package br.edu.ufcg.integra_ru.services;
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.mapper.PratoMapper;
 import br.edu.ufcg.integra_ru.models.Cardapio;
+import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.Prato;
 import br.edu.ufcg.integra_ru.repositories.PratoRepository;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
@@ -75,7 +76,7 @@ public class PratoService {
         return pratoMapper.toDTO(menu);
     }
 
-    public List<PratoDTO> getDishByDate(LocalDate date) {
-        return pratoRepository.findByCardapioDataCardapio(date).stream().map(pratoMapper::toDTO).collect(Collectors.toList());
+    public List<PratoDTO> getDishByDateAndType(LocalDate date, ModalidadePrato type) {
+        return pratoRepository.findByModalidadePratoAndCardapioDataCardapio(type, date).stream().map(pratoMapper::toDTO).collect(Collectors.toList());
     }
 }

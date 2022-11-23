@@ -1,5 +1,6 @@
 package br.edu.ufcg.integra_ru.repositories;
 
+import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.Prato;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,7 @@ public interface PratoRepository extends JpaRepository<Prato, Long> {
 
     Prato getReferenceByCardapioIdAndId(Long cardapioId, Long id);
 
-    List<Prato> findByCardapioDataCardapio(LocalDate date);
+    @Query("select p from Prato p join fetch p.cardapio c where (p.modalidadePrato = ?1 and c.dataCardapio = ?2) or (c.dataCardapio = ?2 and ?1 is null)")
+    List<Prato> findByModalidadePratoAndCardapioDataCardapio(ModalidadePrato type, LocalDate date);
 
 }

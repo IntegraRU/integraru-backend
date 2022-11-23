@@ -1,9 +1,9 @@
 package br.edu.ufcg.integra_ru.controllers;
 
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
+import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.services.PratoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +41,9 @@ public class PratoController {
     }
 
     @GetMapping("/pratos")
-    public List<PratoDTO> getDishByDate(@RequestParam(value = "date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
-        return pratoService.getDishByDate(date);
+    public List<PratoDTO> getDishByDateAndType(@RequestParam(value = "date") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date,
+                                        @RequestParam(value = "type", required = false) ModalidadePrato type){
+        return pratoService.getDishByDateAndType(date, type);
     }
 
     @DeleteMapping("/prato/{pratoId}")
