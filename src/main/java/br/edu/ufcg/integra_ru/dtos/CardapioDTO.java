@@ -19,5 +19,5 @@ public class CardapioDTO {
     private Set<PratoDTO> pratos;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dataCardapio;
+    private LocalDate data;
 }

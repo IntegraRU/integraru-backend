@@ -15,5 +15,5 @@ public interface CardapioRepository extends JpaRepository<Cardapio, Long> {
     @Query("select distinct c from Cardapio c join fetch c.pratos pc where c.id = ?1")
     Cardapio findByIdWithDishes(Long id);
 
-    Cardapio findByDataCardapio(LocalDate date);
+    Cardapio findByData(LocalDate date);
 }

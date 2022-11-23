@@ -15,6 +15,7 @@ public interface PratoMapper {
     Prato toModel(PratoDTO pratoDTO);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "dataCardapio", target = "cardapio.data")
     void updatePratoFromDto(PratoDTO dto, @MappingTarget Prato entity);
 
 }

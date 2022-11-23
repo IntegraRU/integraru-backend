@@ -52,7 +52,7 @@ public class CardapioService {
     }
 
     public Cardapio getByDate(LocalDate date){
-        return repository.findByDataCardapio(date);
+        return repository.findByData(date);
     }
 
 
@@ -70,9 +70,9 @@ public class CardapioService {
         }
     }
 
-    public Cardapio createMenu() {
+    public Cardapio createMenu(LocalDate date) {
         Cardapio menu = new Cardapio();
-        menu.setDataCardapio(LocalDate.now());
+        menu.setData(date);
         return menu;
     }
 }

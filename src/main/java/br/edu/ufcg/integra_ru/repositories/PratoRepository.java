@@ -16,7 +16,7 @@ public interface PratoRepository extends JpaRepository<Prato, Long> {
 
     Prato getReferenceByCardapioIdAndId(Long cardapioId, Long id);
 
-    @Query("select p from Prato p join fetch p.cardapio c where (p.modalidadePrato = ?1 and c.dataCardapio = ?2) or (c.dataCardapio = ?2 and ?1 is null)")
-    List<Prato> findByModalidadePratoAndCardapioDataCardapio(ModalidadePrato type, LocalDate date);
+    @Query("select p from Prato p join fetch p.cardapio c where (p.modalidadePrato = ?1 and c.data = ?2) or (c.data = ?2 and ?1 is null)")
+    List<Prato> findByModalidadePratoAndCardapioData(ModalidadePrato type, LocalDate date);
 
 }

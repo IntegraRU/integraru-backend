@@ -2,11 +2,13 @@ package br.edu.ufcg.integra_ru.dtos;
 
 import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.TipoPrato;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,4 +31,9 @@ public class PratoDTO {
     private String itens;
 
     private String urlImagem;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private LocalDate data;
+
 }

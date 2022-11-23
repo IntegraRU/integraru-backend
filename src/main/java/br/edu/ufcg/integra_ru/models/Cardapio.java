@@ -24,7 +24,7 @@ public class Cardapio {
     private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate dataCardapio;
+    private LocalDate data;
 
     @OneToMany(mappedBy = "cardapio", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private List<Prato> pratos = new ArrayList<>();

@@ -30,9 +30,10 @@ public class PratoService {
 
     @Transactional
     public PratoDTO saveDish(PratoDTO dto){
-        Cardapio cardapio = cardapioService.getByDate(LocalDate.now());
+        LocalDate date = dto.getData() == null ? LocalDate.now() : dto.getData();
+        Cardapio cardapio = cardapioService.getByDate(date);
         if(cardapio == null){
-            cardapio = cardapioService.createMenu();
+            cardapio = cardapioService.createMenu(date);
         }
         Prato model = pratoMapper.toModel(dto);
         model.setCardapio(cardapio);
@@ -55,6 +56,7 @@ public class PratoService {
             found.setNome(dto.getNome());
             found.setTipo(dto.getTipo());
             found.setItens(dto.getItens());
+            found.getCardapio().setData(dto.getData());
             pratoRepository.save(found);
             return  pratoMapper.toDTO(found);
         }
@@ -77,6 +79,6 @@ public class PratoService {
     }
 
     public List<PratoDTO> getDishByDateAndType(LocalDate date, ModalidadePrato type) {
-        return pratoRepository.findByModalidadePratoAndCardapioDataCardapio(type, date).stream().map(pratoMapper::toDTO).collect(Collectors.toList());
+        return pratoRepository.findByModalidadePratoAndCardapioData(type, date).stream().map(pratoMapper::toDTO).collect(Collectors.toList());
     }
 }
