@@ -16,7 +16,7 @@ public class UserError {
         return new ResponseEntity<>(new CustomErrorType(String.format(USUARIO_JA_EXISTE, matricula)), HttpStatus.BAD_REQUEST);
     }
 
-    public static ResponseEntity<CustomErrorType> errorUsuarioNaoCadastrado(Long matricula) {
+    public static ResponseEntity<CustomErrorType> errorUsuarioNaoCadastrado(String matricula) {
         return new ResponseEntity<>(new CustomErrorType(String.format(USUARIO_NAO_CADASTRADO)), HttpStatus.BAD_REQUEST);
     }
 
