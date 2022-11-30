@@ -1,4 +1,4 @@
-package br.edu.ufcg.integra_ru.dto;
+package br.edu.ufcg.integra_ru.dtos;
 
 
 import lombok.AllArgsConstructor;

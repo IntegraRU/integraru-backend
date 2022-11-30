@@ -45,7 +45,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> auth
-                        .antMatchers("/token").permitAll()
+                        .antMatchers("/api/login", "/api-docs").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -67,6 +67,6 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/h2/**");
+        return (web) -> web.ignoring().antMatchers("/h2/**","/swagger-ui/**","/v3/api-docs/**");
     }
 }

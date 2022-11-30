@@ -1,9 +1,12 @@
 package br.edu.ufcg.integra_ru.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,8 +21,8 @@ public class Refeicao {
     private ModalidadePrato modalidade;
 
     private TipoPrato tipo;
-
-    private Date data;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate data;
 
     private int avaliacaoQuant;
 
@@ -27,7 +30,7 @@ public class Refeicao {
 
     private Refeicao(){}
 
-    public Refeicao(String usuario, ModalidadePrato opcao, TipoPrato tipo, Date data) {
+    public Refeicao(String usuario, ModalidadePrato opcao, TipoPrato tipo, LocalDate data) {
         this.usuario = usuario;
         this.modalidade = opcao;
         this.tipo = tipo;
@@ -66,11 +69,11 @@ public class Refeicao {
         this.tipo = tipo;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

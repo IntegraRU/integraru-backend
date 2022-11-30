@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ public class RefeicaoController {
     private RefeicaoService refeicaoService;
 
     @PostMapping
-    public ResponseEntity<?> cadastrarRefeicao(@RequestBody RefeicaoDTO refeicaoDTO){
+    public ResponseEntity<?> cadastrarRefeicao(@RequestBody @Valid RefeicaoDTO refeicaoDTO){
         Refeicao refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
         return new ResponseEntity<Refeicao>(refeicao, HttpStatus.OK);
     }
@@ -39,7 +40,7 @@ public class RefeicaoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> avaliarRefeicao(@RequestBody AvaliacaoDTO avaliacaoDTO, @PathVariable Long id){
+    public ResponseEntity<?> avaliarRefeicao(@RequestBody @Valid AvaliacaoDTO avaliacaoDTO, @PathVariable Long id){
         Optional<Refeicao> refeicao = refeicaoService.getRefeicaobyId(id);
         if(refeicao.isEmpty()){
             return new ResponseEntity<>(ErrorRefeicao.errorRefeicaoNaoExiste(id), HttpStatus.BAD_REQUEST);
