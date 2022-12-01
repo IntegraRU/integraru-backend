@@ -6,6 +6,7 @@ import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.repositories.MatriculaRepository;
 import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +16,10 @@ import java.util.Optional;
 @Service("Usuario")
 public class UsuarioService {
 
+    @Autowired
     private UsuarioRepository userRepository;
+
+    @Autowired
     private MatriculaRepository enrollRepository;
 
     public UsuarioService(UsuarioRepository userRepository) {
@@ -23,12 +27,13 @@ public class UsuarioService {
     }
 
     public Usuario createUser(UsuarioDTO usuarioDTO) {
-        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem());
+
+        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false);
 
         if(this.enrollRepository.existsById(usuarioDTO.getMatricula())) {
-            userWantsSave = this.userRepository.save(userWantsSave);
+            userWantsSave.setBeneficiario(true);
         }
-
+        userWantsSave = this.userRepository.save(userWantsSave);
         return userWantsSave;
     }
 
@@ -41,12 +46,7 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> getUserByEnroll(String matricula) {
-        Optional<Usuario> user = Optional.empty();
-
-        if(this.enrollRepository.existsById(matricula)) {
-             user = this.userRepository.findById(matricula);
-        }
-        return user;
+        return this.userRepository.findById(matricula);
     }
   
 }

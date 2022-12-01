@@ -5,11 +5,11 @@ import org.springframework.http.ResponseEntity;
 
 public class UserError {
 
-    static final String USUARIO_JA_EXISTE = "O usuario de matricula %s ja está cadastrado no sistema.";
+    static final String USUARIO_JA_EXISTE = "O usuário de matrícula %s já está cadastrado no sistema.";
 
-    static final String USUARIO_NAO_CADASTRADO= "O usuario de matricula %s não está cadastrado no sistema.";
+    static final String USUARIO_NAO_CADASTRADO= "O usuário de matrícula %s não está cadastrado no sistema.";
 
-    static final String NENHUM_USUARIO_CADASTRADO= "Nenhum usuario cadastrado.";
+    static final String NENHUM_USUARIO_CADASTRADO= "Nenhum usuário cadastrado.";
 
 
     public static ResponseEntity<CustomErrorType> errorUsuarioJaExiste(Long matricula) {
@@ -17,7 +17,7 @@ public class UserError {
     }
 
     public static ResponseEntity<CustomErrorType> errorUsuarioNaoCadastrado(String matricula) {
-        return new ResponseEntity<>(new CustomErrorType(String.format(USUARIO_NAO_CADASTRADO)), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new CustomErrorType(String.format(USUARIO_NAO_CADASTRADO, matricula)), HttpStatus.BAD_REQUEST);
     }
 
 

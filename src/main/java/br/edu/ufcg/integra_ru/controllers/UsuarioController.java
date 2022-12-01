@@ -6,6 +6,7 @@ import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
 import br.edu.ufcg.integra_ru.util.UserError;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api/user")
 public class UsuarioController {
 
+    @Autowired
     private UsuarioService usuarioService;
 
     @PostMapping
@@ -43,7 +45,7 @@ public class UsuarioController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/users/{matricula}")
+    @GetMapping("/{matricula}")
     public ResponseEntity<?> getUser(@PathVariable String matricula){
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
         if(user.isEmpty()){

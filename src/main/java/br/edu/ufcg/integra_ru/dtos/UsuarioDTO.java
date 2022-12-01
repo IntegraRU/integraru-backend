@@ -21,20 +21,8 @@ public class UsuarioDTO {
 
     private String urlImagem;
 
-    public UsuarioDTO(String matricula, String nome, String email, String telefone, String urlImagem) {
-        this.matricula = matricula;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.urlImagem = urlImagem;
-    }
 
-    public UsuarioDTO(String matricula, String nome, String email) {
-        this.matricula = matricula;
-        this.nome = nome;
-        this.email = email;
 
-    }
 
     public String getMatricula() {
         return matricula;

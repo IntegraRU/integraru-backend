@@ -29,4 +29,6 @@ public class Usuario  {
 
     private String urlImagem;
 
+    private boolean beneficiario;
+
 }
