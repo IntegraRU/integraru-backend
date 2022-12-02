@@ -2,7 +2,7 @@ package br.edu.ufcg.integra_ru.controllers;
 
 import br.edu.ufcg.integra_ru.dtos.JwtRequest;
 import br.edu.ufcg.integra_ru.dtos.JwtResponse;
-import br.edu.ufcg.integra_ru.service.JwtService;
+import br.edu.ufcg.integra_ru.services.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 
 @RestController
 @RequestMapping("/api")

@@ -1,6 +1,6 @@
 package br.edu.ufcg.integra_ru.security;
 
-import br.edu.ufcg.integra_ru.service.JwtService;
+import br.edu.ufcg.integra_ru.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

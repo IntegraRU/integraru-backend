@@ -19,5 +19,7 @@ public class JwtRequest {
     private String username;
 
     @NotBlank(message = "O campo password não pode estar vazio")
+    private String username;
+    
     private String password;
 }

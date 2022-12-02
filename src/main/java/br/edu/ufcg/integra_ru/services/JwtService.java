@@ -1,4 +1,4 @@
-package br.edu.ufcg.integra_ru.service;
+package br.edu.ufcg.integra_ru.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

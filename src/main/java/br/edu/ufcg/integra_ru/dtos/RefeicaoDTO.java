@@ -2,7 +2,9 @@ package br.edu.ufcg.integra_ru.dtos;
 
 import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.TipoPrato;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class RefeicaoDTO {
@@ -11,7 +13,8 @@ public class RefeicaoDTO {
 
     private TipoPrato tipo;
 
-    private Date data;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    private LocalDate data;
 
     private String usuario;
 
@@ -31,11 +34,11 @@ public class RefeicaoDTO {
         this.tipo = tipo;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
