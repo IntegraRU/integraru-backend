@@ -2,39 +2,55 @@ package br.edu.ufcg.integra_ru.services;
 
 
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
+import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
+import br.edu.ufcg.integra_ru.models.Matricula;
+import br.edu.ufcg.integra_ru.models.Role;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.repositories.MatriculaRepository;
+import br.edu.ufcg.integra_ru.repositories.RoleRepository;
 import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 
-@Service("Usuario")
-public class UsuarioService {
+@Service
+public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository userRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
     private MatriculaRepository enrollRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     public UsuarioService(UsuarioRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public Usuario createUser(UsuarioDTO usuarioDTO) {
+    public UsuarioResponseDTO createUser(UsuarioDTO usuarioDTO) {
 
-        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false);
+        String encodedPassword = this.passwordEncoder.encode(usuarioDTO.getSenha());
+        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false, encodedPassword);
 
-        if(this.enrollRepository.existsById(usuarioDTO.getMatricula())) {
-            userWantsSave.setBeneficiario(true);
-        }
+        Matricula matricula = this.enrollRepository.findById(usuarioDTO.getMatricula())
+                .orElseThrow(() -> new UsernameNotFoundException("Matricula nao encontrada"));
+
+        decideUserRole(matricula, userWantsSave);
+
         userWantsSave = this.userRepository.save(userWantsSave);
-        return userWantsSave;
+        return new UsuarioResponseDTO(userWantsSave.getMatricula(), userWantsSave.getNome(), userWantsSave.getEmail(), userWantsSave.getTelefone(), userWantsSave.getUrlImagem());
     }
 
     public void deleteUser(Usuario usuario) {
@@ -48,5 +64,22 @@ public class UsuarioService {
     public Optional<Usuario> getUserByEnroll(String matricula) {
         return this.userRepository.findById(matricula);
     }
-  
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository.findById(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
+
+    private void decideUserRole(Matricula matricula, Usuario usuario){
+        Role role;
+        if(matricula.isBeneficiario()){
+            role = this.roleRepository.getReferenceById("BENEFICIARIO");
+            usuario.setBeneficiario(true);
+        }
+        else{
+            role = this.roleRepository.getReferenceById("EXTERNO");
+        }
+        usuario.setRole(role);
+    }
 }
