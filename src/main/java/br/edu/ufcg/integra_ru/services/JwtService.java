@@ -10,12 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtService {
-    private static final long ONE_HOUR_IN_SECONDS = 3600;
+    private static final long EXPIRY_DAYS = 7;
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
@@ -25,8 +26,8 @@ public class JwtService {
                 .collect(Collectors.joining(" "));
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withClaim("authorities", scope)
-                .withExpiresAt(Instant.now().plusSeconds(ONE_HOUR_IN_SECONDS))
+                .withClaim("role", scope)
+                .withExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS))
                 .sign(Algorithm.HMAC512(SECRET_KEY));
     }
 
