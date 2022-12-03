@@ -1,5 +1,7 @@
 package br.edu.ufcg.integra_ru.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -21,8 +23,7 @@ public class UsuarioDTO {
 
     private String urlImagem;
 
-
-
+    private String senha;
 
     public String getMatricula() {
         return matricula;
@@ -62,5 +63,14 @@ public class UsuarioDTO {
 
     public void setUrlImagem(String urlImagem) {
         this.urlImagem = urlImagem;
+    }
+
+//    @JsonIgnore
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

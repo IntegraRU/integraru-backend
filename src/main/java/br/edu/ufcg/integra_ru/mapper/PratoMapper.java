@@ -10,12 +10,13 @@ public interface PratoMapper {
 
     PratoMapper INSTANCE = Mappers.getMapper(PratoMapper.class);
 
+    @Mapping(target = "data", source = "cardapio.data")
     PratoDTO toDTO(Prato pratoCardapio);
 
     Prato toModel(PratoDTO pratoDTO);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "dataCardapio", target = "cardapio.data")
+    @Mapping(source = "data", target = "cardapio.data")
     void updatePratoFromDto(PratoDTO dto, @MappingTarget Prato entity);
 
 }

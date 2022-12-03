@@ -18,5 +18,7 @@ public class Matricula {
     @Id
     private String valorMatricula;
 
+    private boolean beneficiario = false;
+
     
 }

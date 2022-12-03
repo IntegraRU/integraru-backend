@@ -2,6 +2,7 @@ package br.edu.ufcg.integra_ru.controllers;
 
 
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
+import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
 import br.edu.ufcg.integra_ru.util.UserError;
@@ -22,8 +23,8 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UsuarioDTO usuarioDTO){
-        Usuario user = usuarioService.createUser(usuarioDTO);
-        return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+        UsuarioResponseDTO user = usuarioService.createUser(usuarioDTO);
+        return new ResponseEntity<UsuarioResponseDTO>(user, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{matricula}")
