@@ -2,7 +2,7 @@ package br.edu.ufcg.integra_ru.models;
 
 public enum TipoPrato {
 
-    COMUM("Menu comum"), VEGANO("Menu vegano"), VEGERATIANO("Menu vegetariano");
+    COMUM("Menu comum"), VEGANO("Menu vegano"), VEGETARIANO("Menu vegetariano");
 
     private String tipo;
 
