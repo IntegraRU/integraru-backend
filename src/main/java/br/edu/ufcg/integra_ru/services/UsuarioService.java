@@ -22,7 +22,7 @@ import java.util.Optional;
 
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService {
 
     @Autowired
     private UsuarioRepository userRepository;
@@ -63,12 +63,6 @@ public class UsuarioService implements UserDetailsService {
 
     public Optional<Usuario> getUserByEnroll(String matricula) {
         return this.userRepository.findById(matricula);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
     private void decideUserRole(Matricula matricula, Usuario usuario){
