@@ -10,10 +10,8 @@ import br.edu.ufcg.integra_ru.repositories.MatriculaRepository;
 import br.edu.ufcg.integra_ru.repositories.RoleRepository;
 import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
 
+import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +43,7 @@ public class UsuarioService {
         Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false, encodedPassword);
 
         Matricula matricula = this.enrollRepository.findById(usuarioDTO.getMatricula())
-                .orElseThrow(() -> new UsernameNotFoundException("Matricula nao encontrada"));
+                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Matricula nao encontrada"));
 
         decideUserRole(matricula, userWantsSave);
 
