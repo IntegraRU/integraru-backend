@@ -74,4 +74,12 @@ public class UsuarioService {
         }
         usuario.setRole(role);
     }
+
+    public void addCredit(String matricula, int quantCredito) {
+
+        Usuario user = userRepository.getReferenceById(matricula);
+        user.setCredito(user.getCredito() + quantCredito);
+        userRepository.save(user);
+
+    }
 }

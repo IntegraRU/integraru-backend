@@ -54,4 +54,17 @@ public class UsuarioController {
         }
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
+
+    @PatchMapping
+    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @PathVariable int quantCredito){
+        Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
+        if(user.isEmpty()){
+            return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
+        }
+        if(quantCredito <= 0) {
+            return new ResponseEntity<>(UserError.errorValorNaoPodeSerAdicionado(), HttpStatus.BAD_REQUEST);
+        }
+        usuarioService.addCredit(matricula, quantCredito);
+        return new ResponseEntity<>(matricula, HttpStatus.OK);
+    }
 }
