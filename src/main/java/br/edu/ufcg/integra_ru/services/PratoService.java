@@ -37,6 +37,7 @@ public class PratoService {
         }
         Prato model = pratoMapper.toModel(dto);
         model.setCardapio(cardapio);
+        model.setId(null);
         return pratoMapper.toDTO(pratoRepository.save(model));
     }
     @Transactional

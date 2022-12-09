@@ -3,6 +3,7 @@ package br.edu.ufcg.integra_ru.controllers;
 import br.edu.ufcg.integra_ru.dtos.JwtRequest;
 import br.edu.ufcg.integra_ru.dtos.JwtResponse;
 import br.edu.ufcg.integra_ru.services.JwtService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
+@SecurityRequirements
 public class AuthController {
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
     private final AuthenticationManager authenticationManager;

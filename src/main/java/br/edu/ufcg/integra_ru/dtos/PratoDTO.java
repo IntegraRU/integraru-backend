@@ -33,7 +33,6 @@ public class PratoDTO {
     private String urlImagem;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDate data;
 
 }
