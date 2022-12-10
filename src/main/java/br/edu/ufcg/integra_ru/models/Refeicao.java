@@ -18,23 +18,25 @@ public class Refeicao {
 
     private String usuario;
 
-    private ModalidadePrato modalidade;
+    private Prato prato;
 
-    private TipoPrato tipo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate data;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private LocalDate dataReserva;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private LocalDate dataCheckout;
 
     private int avaliacaoQuant;
 
     private String avaliacaoComentario;
 
+
     private Refeicao(){}
 
-    public Refeicao(String usuario, ModalidadePrato opcao, TipoPrato tipo, LocalDate data) {
+    public Refeicao(String usuario, Prato prato, LocalDate data) {
         this.usuario = usuario;
-        this.modalidade = opcao;
-        this.tipo = tipo;
-        this.data = data;
+        this.prato = prato;
+        this.dataReserva = data;
     }
 
     public Long getId() {
@@ -53,28 +55,28 @@ public class Refeicao {
         this.usuario = usuario;
     }
 
-    public ModalidadePrato getModalidade() {
-        return modalidade;
+    public Prato getPrato() {
+        return prato;
     }
 
-    public void setModalidade(ModalidadePrato modalidade) {
-        this.modalidade = modalidade;
+    public void setPrato(Prato prato) {
+        this.prato = prato;
     }
 
-    public TipoPrato getTipo() {
-        return tipo;
+    public LocalDate getDataReserva() {
+        return dataReserva;
     }
 
-    public void setTipo(TipoPrato tipo) {
-        this.tipo = tipo;
+    public void setDataReserva(LocalDate dataReserva) {
+        this.dataReserva = dataReserva;
     }
 
-    public LocalDate getData() {
-        return data;
+    public LocalDate getDataCheckout() {
+        return dataCheckout;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
+    public void setDataCheckout(LocalDate dataCheckout) {
+        this.dataCheckout = dataCheckout;
     }
 
     public int getAvaliacaoQuant() {
@@ -92,4 +94,5 @@ public class Refeicao {
     public void setAvaliacaoComentario(String avaliacaoComentario) {
         this.avaliacaoComentario = avaliacaoComentario;
     }
+
 }

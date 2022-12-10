@@ -13,6 +13,14 @@ public class ErrorRefeicao {
 
     static final String DATA_NAO_REFEICOES = "Não há refeições cadastradas para a data selecionada.";
 
+    static final String SEM_RESERVA = "O usuário não efetuou uma reserva para a data solicitada.";
+
+    static final String JA_RESERVOU = "O usuário já efetuou reserva para esta refeição.";
+
+    static final String JA_FEZ_CHECKOUT = "O usuário já fez checkout para esta refeição.";
+
+    static final String NAO_FEZ_CHECKOUT = "O usuário não fez checkout para esta refeição.";
+
     public static ResponseEntity<CustomErrorType> errorRefeicaoNaoExiste(Long id) {
         return new ResponseEntity<>(new CustomErrorType(String.format(REFEICAO_NAO_EXISTE, id)), HttpStatus.BAD_REQUEST);
     }
@@ -28,4 +36,21 @@ public class ErrorRefeicao {
     public static ResponseEntity<CustomErrorType> errorDataSemRefeicoes() {
         return new ResponseEntity<>(new CustomErrorType(DATA_NAO_REFEICOES), HttpStatus.BAD_REQUEST);
     }
+
+    public static ResponseEntity<CustomErrorType> errorSemReserva(){
+        return new ResponseEntity<>(new CustomErrorType(SEM_RESERVA), HttpStatus.BAD_REQUEST);
+    }
+
+    public static ResponseEntity<CustomErrorType> errorJaReservou(){
+        return new ResponseEntity<>(new CustomErrorType(JA_RESERVOU), HttpStatus.BAD_REQUEST);
+    }
+
+    public static ResponseEntity<CustomErrorType> errorJaFezCheckout(){
+        return new ResponseEntity<>(new CustomErrorType(JA_FEZ_CHECKOUT), HttpStatus.BAD_REQUEST);
+    }
+
+    public static ResponseEntity<CustomErrorType> errorNaoFezCheckout(){
+        return new ResponseEntity<>(new CustomErrorType(NAO_FEZ_CHECKOUT), HttpStatus.BAD_REQUEST);
+    }
 }
+
