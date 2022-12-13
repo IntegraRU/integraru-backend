@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Usuario implements UserDetails {
 
     private String senha;
 
-    private int credito;
+    private BigDecimal credito;
 
     @ManyToOne
     private Role role;
@@ -54,7 +55,7 @@ public class Usuario implements UserDetails {
         this.urlImagem = urlImagem;
         this.beneficiario = beneficiario;
         this.senha = senha;
-        this.credito = 0;
+        this.credito = new BigDecimal("0.0");
     }
 
     @Override
@@ -92,7 +93,7 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-    public void setCredito(int credito) {
+    public void setCredito(BigDecimal credito) {
         this.credito = credito;
     }
 }

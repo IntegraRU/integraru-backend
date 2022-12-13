@@ -9,12 +9,12 @@ import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.repositories.MatriculaRepository;
 import br.edu.ufcg.integra_ru.repositories.RoleRepository;
 import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
-
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,10 +75,10 @@ public class UsuarioService {
         usuario.setRole(role);
     }
 
-    public void addCredit(String matricula, int quantCredito) {
+    public void addCredit(String matricula, BigDecimal quantCredito) {
 
         Usuario user = userRepository.getReferenceById(matricula);
-        user.setCredito(user.getCredito() + quantCredito);
+        user.setCredito(user.getCredito().add(quantCredito));
         userRepository.save(user);
 
     }
