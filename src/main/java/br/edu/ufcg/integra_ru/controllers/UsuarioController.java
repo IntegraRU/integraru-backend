@@ -57,8 +57,8 @@ public class UsuarioController {
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
-    @PatchMapping
-    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @PathVariable BigDecimal quantCredito){
+    @PatchMapping("/{matricula}")
+    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @RequestBody BigDecimal quantCredito){
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
         if(user.isEmpty()){
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
