@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,11 +75,13 @@ public class UsuarioService {
         usuario.setRole(role);
     }
 
-    public void addCredit(String matricula, BigDecimal quantCredito) {
-
-        Usuario user = userRepository.getReferenceById(matricula);
-        user.setCredito(user.getCredito().add(quantCredito));
-        userRepository.save(user);
-
+    public void addCredit(String matricula, UsuarioDTO userDto) {
+        try {
+            Usuario userFound = userRepository.getReferenceById(matricula);
+            userFound.setCredito(userFound.getCredito().add(userDto.getCredito()));
+            userRepository.save(userFound);
+        } catch (EntityNotFoundException enfe) {
+            throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
+        }
     }
 }

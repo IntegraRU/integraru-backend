@@ -2,6 +2,7 @@ package br.edu.ufcg.integra_ru.dtos;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class UsuarioDTO {
 
@@ -23,7 +24,7 @@ public class UsuarioDTO {
 
     private String senha;
 
-    private int credito;
+    private BigDecimal credito;
 
     public String getMatricula() {
         return matricula;
@@ -74,8 +75,8 @@ public class UsuarioDTO {
         this.senha = senha;
     }
 
-    public int getCredito() { return credito; }
+    public BigDecimal getCredito() { return credito; }
 
-    public void setCredito(int credito) { this.credito = credito;
+    public void setCredito(BigDecimal credito) { this.credito = credito;
     }
 }

@@ -6,13 +6,12 @@ import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
 import br.edu.ufcg.integra_ru.util.UserError;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,16 +57,12 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{matricula}")
-    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @RequestBody BigDecimal quantCredito){
+    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @RequestBody @Valid UsuarioDTO userdto){
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
         if(user.isEmpty()){
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
-        BigDecimal valor = new BigDecimal("0.0");
-        if(quantCredito.compareTo(valor) == 1) {
-            return new ResponseEntity<>(UserError.errorValorNaoPodeSerAdicionado(), HttpStatus.BAD_REQUEST);
-        }
-        usuarioService.addCredit(matricula, quantCredito);
+        usuarioService.addCredit(matricula, userdto);
         return new ResponseEntity<>(matricula, HttpStatus.OK);
     }
 }
