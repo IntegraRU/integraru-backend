@@ -8,4 +8,6 @@ import java.util.List;
 public interface RefeicaoRepository extends JpaRepository<Refeicao, Long> {
 
     List<Refeicao> findByMatriculaUser(String usuarioMatricula);
+
+    List<Refeicao> findByPratoID(Long pratoID);
 }
