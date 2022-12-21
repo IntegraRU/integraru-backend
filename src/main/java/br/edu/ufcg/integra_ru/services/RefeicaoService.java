@@ -1,13 +1,16 @@
 package br.edu.ufcg.integra_ru.services;
 
 import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
+import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
+import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.Refeicao;
 import br.edu.ufcg.integra_ru.repositories.RefeicaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +26,11 @@ public class RefeicaoService {
 
     public RefeicaoDTO makeDTO(Refeicao refeicao){
         PratoDTO prato = pratoService.getDishById(refeicao.getPratoID());
-        return new RefeicaoDTO(refeicao.getMatriculaUser(), refeicao.getDataReserva(), refeicao.getAvaliacaoQuant(), refeicao.getAvaliacaoComentario(), prato);
-
+        RefeicaoDTO dto = new RefeicaoDTO(refeicao.getId(), refeicao.getMatriculaUser(), refeicao.getDataReserva(), refeicao.getAvaliacaoQuant(), refeicao.getAvaliacaoComentario(), prato);
+        if(refeicao.getDataCheckout() != null){
+            dto.setDataCheckout(refeicao.getDataCheckout());
+        }
+        return dto;
     }
 
     public boolean refeicaoExiste(RefeicaoDTO refeicaoDTO) {
@@ -78,4 +84,35 @@ public class RefeicaoService {
         }
         return null;
     }
+
+    public boolean fezCheckout(Long refeicaoID) {
+        Optional<Refeicao> opt =  refeicaoRepository.findById(refeicaoID);
+        if(opt.isPresent()){
+            return opt.get().getDataCheckout() != null;
+        }
+        return false;
+    }
+
+    public RefeicaoDTO efetuarCheckout(CheckoutDTO checkoutDTO) {
+        Optional<Refeicao> opt =  refeicaoRepository.findById(checkoutDTO.getRefeicaoID());
+        if(opt.isPresent()){
+            Refeicao refeicao = opt.get();
+            refeicao.setDataCheckout(checkoutDTO.getDataCheckout());
+            refeicaoRepository.save(refeicao);
+            return makeDTO(saveRefeicao(refeicao));
+        }
+        return null;
+    }
+
+    public BigDecimal getValorRefeicao(Long id) {
+        Optional<Refeicao> opt =  refeicaoRepository.findById(id);
+        if(opt.isPresent()){
+            Refeicao refeicao = opt.get();
+            PratoDTO prato = pratoService.getDishById(refeicao.getPratoID());
+            return prato.getModalidadePrato().getValue();
+        }
+        return null;
+    }
+
+
 }

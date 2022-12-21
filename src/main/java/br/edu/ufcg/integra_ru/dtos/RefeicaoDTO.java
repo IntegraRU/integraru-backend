@@ -7,9 +7,13 @@ import java.time.LocalDateTime;
 
 public class RefeicaoDTO {
 
+    private Long RefeicaoID;
+
     private String usuarioMatricula;
 
     private LocalDateTime dataReserva;
+
+    private LocalDateTime dataCheckout;
 
     private int avaliacaoQuant;
 
@@ -17,12 +21,21 @@ public class RefeicaoDTO {
 
     private PratoDTO prato;
 
-    public RefeicaoDTO(String usuarioMatricula, LocalDateTime dataReserva, int avaliacaoQuant, String avaliacaoComentario, PratoDTO prato) {
+    public RefeicaoDTO(Long refeicaoID, String usuarioMatricula, LocalDateTime dataReserva, int avaliacaoQuant, String avaliacaoComentario, PratoDTO prato) {
+        this.RefeicaoID = refeicaoID;
         this.usuarioMatricula = usuarioMatricula;
         this.dataReserva = dataReserva;
         this.avaliacaoQuant = avaliacaoQuant;
         this.avaliacaoComentario = avaliacaoComentario;
         this.prato = prato;
+    }
+
+    public Long getRefeicaoID() {
+        return RefeicaoID;
+    }
+
+    public void setRefeicaoID(Long refeicaoID) {
+        RefeicaoID = refeicaoID;
     }
 
     public String getUsuarioMatricula() {
@@ -39,6 +52,14 @@ public class RefeicaoDTO {
 
     public void setDataReserva(LocalDateTime dataReserva) {
         this.dataReserva = dataReserva;
+    }
+
+    public LocalDateTime getDataCheckout() {
+        return dataCheckout;
+    }
+
+    public void setDataCheckout(LocalDateTime dataCheckout) {
+        this.dataCheckout = dataCheckout;
     }
 
     public int getAvaliacaoQuant() {

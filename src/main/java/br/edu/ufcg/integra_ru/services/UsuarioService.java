@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,5 +74,9 @@ public class UsuarioService {
             role = this.roleRepository.getReferenceById("EXTERNO");
         }
         usuario.setRole(role);
+    }
+
+    public void debitarValor(BigDecimal valor) {
+        //TODO
     }
 }
