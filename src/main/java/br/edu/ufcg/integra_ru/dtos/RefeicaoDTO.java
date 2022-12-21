@@ -1,52 +1,88 @@
 package br.edu.ufcg.integra_ru.dtos;
 
-import br.edu.ufcg.integra_ru.models.ModalidadePrato;
-import br.edu.ufcg.integra_ru.models.TipoPrato;
+import br.edu.ufcg.integra_ru.models.Prato;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class RefeicaoDTO {
 
-    private ModalidadePrato modalidadePrato;
+    private Long RefeicaoID;
 
-    private TipoPrato tipo;
+    private String usuarioMatricula;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate data;
+    private LocalDateTime dataReserva;
 
-    private String usuario;
+    private LocalDateTime dataCheckout;
 
-    public ModalidadePrato getModalidadePrato() {
-        return modalidadePrato;
+    private int avaliacaoQuant;
+
+    private String avaliacaoComentario;
+
+    private PratoDTO prato;
+
+    public RefeicaoDTO(Long refeicaoID, String usuarioMatricula, LocalDateTime dataReserva, int avaliacaoQuant, String avaliacaoComentario, PratoDTO prato) {
+        this.RefeicaoID = refeicaoID;
+        this.usuarioMatricula = usuarioMatricula;
+        this.dataReserva = dataReserva;
+        this.avaliacaoQuant = avaliacaoQuant;
+        this.avaliacaoComentario = avaliacaoComentario;
+        this.prato = prato;
     }
 
-    public void setModalidadePrato(ModalidadePrato modalidadePrato) {
-        this.modalidadePrato = modalidadePrato;
+    public Long getRefeicaoID() {
+        return RefeicaoID;
     }
 
-    public TipoPrato getTipo() {
-        return tipo;
+    public void setRefeicaoID(Long refeicaoID) {
+        RefeicaoID = refeicaoID;
     }
 
-    public void setTipo(TipoPrato tipo) {
-        this.tipo = tipo;
+    public String getUsuarioMatricula() {
+        return usuarioMatricula;
     }
 
-    public LocalDate getData() {
-        return data;
+    public void setUsuarioMatricula(String usuarioMatricula) {
+        this.usuarioMatricula = usuarioMatricula;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
+    public LocalDateTime getDataReserva() {
+        return dataReserva;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public void setDataReserva(LocalDateTime dataReserva) {
+        this.dataReserva = dataReserva;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public LocalDateTime getDataCheckout() {
+        return dataCheckout;
+    }
+
+    public void setDataCheckout(LocalDateTime dataCheckout) {
+        this.dataCheckout = dataCheckout;
+    }
+
+    public int getAvaliacaoQuant() {
+        return avaliacaoQuant;
+    }
+
+    public void setAvaliacaoQuant(int avaliacaoQuant) {
+        this.avaliacaoQuant = avaliacaoQuant;
+    }
+
+    public String getAvaliacaoComentario() {
+        return avaliacaoComentario;
+    }
+
+    public void setAvaliacaoComentario(String avaliacaoComentario) {
+        this.avaliacaoComentario = avaliacaoComentario;
+    }
+
+    public PratoDTO getPrato() {
+        return prato;
+    }
+
+    public void setPrato(PratoDTO prato) {
+        this.prato = prato;
     }
 }

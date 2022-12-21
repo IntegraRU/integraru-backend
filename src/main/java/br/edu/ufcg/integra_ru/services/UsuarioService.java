@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,5 +91,11 @@ public class UsuarioService {
         } catch (EntityNotFoundException enfe) {
             throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
         }
+
+    }
+
+    @Transactional
+    public void debitarValor(BigDecimal valor) {
+        // TODO
     }
 }

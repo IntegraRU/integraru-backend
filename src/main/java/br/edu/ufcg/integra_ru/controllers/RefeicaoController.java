@@ -1,88 +1,104 @@
 package br.edu.ufcg.integra_ru.controllers;
 
+
 import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
+import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
 import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
-import br.edu.ufcg.integra_ru.models.Refeicao;
+import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.RefeicaoService;
-import br.edu.ufcg.integra_ru.util.ErrorRefeicao;
+import br.edu.ufcg.integra_ru.services.UsuarioService;
+import br.edu.ufcg.integra_ru.util.RefeicaoError;
+import br.edu.ufcg.integra_ru.util.UserError;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/refeicao")
+@RequestMapping("/api")
 public class RefeicaoController {
 
     @Autowired
-    private RefeicaoService refeicaoService;
+    RefeicaoService refeicaoService;
 
-    @PostMapping
-    public ResponseEntity<?> cadastrarRefeicao(@RequestBody @Valid RefeicaoDTO refeicaoDTO){
-        Refeicao refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
-        return new ResponseEntity<Refeicao>(refeicao, HttpStatus.OK);
-    }
+    @Autowired
+    UsuarioService usuarioService;
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> apagarRefeicao(@PathVariable Long id){
-        Optional<Refeicao> refeicao = refeicaoService.getRefeicaobyId(id);
-        if(refeicao.isEmpty()){
-            return new ResponseEntity<>(ErrorRefeicao.errorRefeicaoNaoExiste(id), HttpStatus.BAD_REQUEST);
+    @PostMapping("/refeicao")
+    public ResponseEntity<?> cadastrarRefeicao(@RequestBody RefeicaoDTO refeicaoDTO){
+        Optional<Usuario> usuarioOptional = usuarioService.getUserByEnroll(refeicaoDTO.getUsuarioMatricula());
+        if(usuarioOptional.isEmpty()){
+            return UserError.errorUsuarioNaoCadastrado(refeicaoDTO.getUsuarioMatricula());
         }
-        refeicaoService.deleteRefeicao(refeicao.get());
-        return new ResponseEntity<>(id, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> avaliarRefeicao(@RequestBody @Valid AvaliacaoDTO avaliacaoDTO, @PathVariable Long id){
-        Optional<Refeicao> refeicao = refeicaoService.getRefeicaobyId(id);
-        if(refeicao.isEmpty()){
-            return new ResponseEntity<>(ErrorRefeicao.errorRefeicaoNaoExiste(id), HttpStatus.BAD_REQUEST);
+        if(refeicaoService.refeicaoExiste(refeicaoDTO)){
+            return RefeicaoError.errorRefeicaoJaCadastrada(refeicaoDTO.getUsuarioMatricula(), refeicaoDTO.getDataReserva());
         }
-        Refeicao result = refeicaoService.avaliarRefeicao(refeicao.get(),
-                avaliacaoDTO.getAvaliacaoQuantitativa(), avaliacaoDTO.getAvaliacaoComentario());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(refeicaoService.cadastrarRefeicao(refeicaoDTO), HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/refeicoes")
     public ResponseEntity<?> listarRefeicoes(){
-        List<Refeicao> refeicoes = refeicaoService.getRefeicoes();
+        List<RefeicaoDTO> refeicoes = refeicaoService.listarRefeicoes();
         if(refeicoes.isEmpty()){
-            return new ResponseEntity<>(ErrorRefeicao.errorSemRefeicoes(), HttpStatus.BAD_REQUEST);
+            return RefeicaoError.errorSemRefeicoes();
         }
         return new ResponseEntity<>(refeicoes, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/refeicao/{id}")
     public ResponseEntity<?> getRefeicao(@PathVariable Long id){
-        Optional<Refeicao> refeicao = refeicaoService.getRefeicaobyId(id);
-        if(refeicao.isEmpty()){
-            return new ResponseEntity<>(ErrorRefeicao.errorRefeicaoNaoExiste(id), HttpStatus.BAD_REQUEST);
+        Optional<RefeicaoDTO> refeicaoOptional = refeicaoService.getRefeicaoById(id);
+        if(refeicaoOptional.isEmpty()){
+            return RefeicaoError.errorRefeicaoNaoExiste(id);
         }
-        return new ResponseEntity<>(refeicao.get(), HttpStatus.OK);
+        return new ResponseEntity<>(refeicaoOptional.get(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{usuario}")
-    public ResponseEntity<?> getRefeicoesUsuario(@PathVariable String usuario){
-        List<Refeicao> refeicoes = refeicaoService.getRefeicoesByUsuario(usuario);
-        if(refeicoes.isEmpty()){
-            return new ResponseEntity<>(ErrorRefeicao.errorUsuarioSemRefeicoes(), HttpStatus.BAD_REQUEST);
+    @PutMapping("/refeicao/{id}")
+    public ResponseEntity<?> avaliarRefeicao(@PathVariable Long id, AvaliacaoDTO avaliacaoDTO){
+        Optional<RefeicaoDTO> refeicaoOptional = refeicaoService.getRefeicaoById(id);
+        if(refeicaoOptional.isEmpty()){
+            return RefeicaoError.errorRefeicaoNaoExiste(id);
         }
-        return new ResponseEntity<>(refeicoes, HttpStatus.OK);
+        if(!this.refeicaoService.fezCheckout(id)){
+            return RefeicaoError.errorNaoFezCheckout(id);
+        }
+        return new ResponseEntity<>(refeicaoService.avaliarRefeicao(id, avaliacaoDTO), HttpStatus.OK);
     }
 
-    @GetMapping("/data/{data}")
-    public ResponseEntity<?> getRefeicoesData(@PathVariable("data") @DateTimeFormat(pattern = "dd-MM-yyyy") Date data){
-        List<Refeicao> refeicoes = refeicaoService.getRefeicoesByData(data);
-        if(refeicoes.isEmpty()){
-            return new ResponseEntity<>(ErrorRefeicao.errorDataSemRefeicoes(), HttpStatus.BAD_REQUEST);
+    @DeleteMapping("/refeicao/{id}")
+    public ResponseEntity<?> deleteRefeicao(@PathVariable Long id){
+        Optional<RefeicaoDTO> refeicaoOptional = refeicaoService.getRefeicaoById(id);
+        if(refeicaoOptional.isEmpty()){
+            return RefeicaoError.errorRefeicaoNaoExiste(id);
         }
-        return new ResponseEntity<>(refeicoes, HttpStatus.OK);
+        refeicaoService.deleteRefeicao(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+
     }
+
+    @PutMapping("/checkout")
+    public ResponseEntity<?> checkout(@RequestBody CheckoutDTO checkoutDTO){
+        Optional<RefeicaoDTO> refeicaoOptional = refeicaoService.getRefeicaoById(checkoutDTO.getRefeicaoID());
+        if(refeicaoOptional.isEmpty()){
+            return RefeicaoError.errorRefeicaoNaoExiste(checkoutDTO.getRefeicaoID());
+        }
+        if(this.refeicaoService.fezCheckout(checkoutDTO.getRefeicaoID())){
+            return RefeicaoError.errorJaFezCheckout(checkoutDTO.getRefeicaoID());
+        }
+        RefeicaoDTO refeicaoNova = refeicaoService.efetuarCheckout(checkoutDTO);
+        BigDecimal valor = refeicaoService.getValorRefeicao(checkoutDTO.getRefeicaoID());
+        usuarioService.debitarValor(valor);
+        return new ResponseEntity<RefeicaoDTO>(refeicaoNova, HttpStatus.OK);
+    }
+
+    //GetRefeicoesDeUsuario
+    //Checkout
+    //GetAvaliacoesPorPrato
+    // 
+
 }

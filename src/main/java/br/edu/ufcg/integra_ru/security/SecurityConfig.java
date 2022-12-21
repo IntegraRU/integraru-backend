@@ -54,8 +54,12 @@ public class SecurityConfig {
                 .cors().and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> auth
+<<<<<<< HEAD
                         .antMatchers("/api/login", "/api-docs", "/api/user/**").permitAll()
                         .antMatchers(HttpMethod.PATCH,"/api/user/**").hasRole("ADMINISTRADOR")
+=======
+                        .antMatchers("/api/login", "/api-docs", "/api/user/**", "/api/prato", "/api/refeicao/**", "/api/refeicoes", "/api/checkout").permitAll()
+>>>>>>> develop
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
