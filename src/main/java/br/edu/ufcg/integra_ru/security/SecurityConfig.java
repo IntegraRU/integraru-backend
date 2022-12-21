@@ -32,34 +32,31 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userService;
 
-//    @Bean
-//    @Primary
-//    public UserDetailsService users() {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-//                .roles("USER")
-//                .build();
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
-//                .roles("USER", "ADMIN")
-//                .build();
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
+    // @Bean
+    // @Primary
+    // public UserDetailsService users() {
+    // UserDetails user = User.builder()
+    // .username("user")
+    // .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+    // .roles("USER")
+    // .build();
+    // UserDetails admin = User.builder()
+    // .username("admin")
+    // .password("{bcrypt}$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW")
+    // .roles("USER", "ADMIN")
+    // .build();
+    // return new InMemoryUserDetailsManager(user, admin);
+    // }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors().and()
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeRequests( auth -> auth
-<<<<<<< HEAD
-                        .antMatchers("/api/login", "/api-docs", "/api/user/**").permitAll()
-                        .antMatchers(HttpMethod.PATCH,"/api/user/**").hasRole("ADMINISTRADOR")
-=======
-                        .antMatchers("/api/login", "/api-docs", "/api/user/**", "/api/prato", "/api/refeicao/**", "/api/refeicoes", "/api/checkout").permitAll()
->>>>>>> develop
+                .authorizeRequests(auth -> auth
+                        .antMatchers("/api/login", "/api-docs", "/api/user/**", "/api/prato", "/api/refeicao/**",
+                                "/api/refeicoes", "/api/checkout")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -68,12 +65,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtRequestFilter jwtRequestFilter(){
+    public JwtRequestFilter jwtRequestFilter() {
         return new JwtRequestFilter();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) throws Exception{
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) throws Exception {
         var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -82,7 +79,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/h2/**","/swagger-ui/**","/v3/api-docs/**");
+        return (web) -> web.ignoring().antMatchers("/h2/**", "/swagger-ui/**", "/v3/api-docs/**");
     }
 
     @Bean
@@ -95,7 +92,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

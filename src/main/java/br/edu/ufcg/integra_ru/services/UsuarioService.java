@@ -95,7 +95,13 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void debitarValor(BigDecimal valor) {
-        // TODO
+    public void debitarValor(String matricula, UsuarioDTO userDto) {
+        try {
+            Usuario userFound = userRepository.getReferenceById(matricula);
+            userFound.setCredito(userFound.getCredito().subtract(userDto.getCredito()));
+            userRepository.save(userFound);
+        } catch (EntityNotFoundException enfe) {
+            throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
+        }
     }
 }

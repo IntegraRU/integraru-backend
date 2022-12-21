@@ -55,13 +55,23 @@ public class UsuarioController {
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
-    @PatchMapping("/{matricula}")
+    @PatchMapping("/{matricula}/add-credit")
     public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @RequestBody @Valid UsuarioDTO userdto) {
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
         if (user.isEmpty()) {
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
         usuarioService.addCredit(matricula, userdto);
+        return new ResponseEntity<>(matricula, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{matricula}/del-credit")
+    public ResponseEntity<?> delCreditUser(@PathVariable String matricula, @RequestBody @Valid UsuarioDTO userdto) {
+        Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
+        }
+        usuarioService.debitarCredit(matricula, userdto);
         return new ResponseEntity<>(matricula, HttpStatus.OK);
     }
 }
