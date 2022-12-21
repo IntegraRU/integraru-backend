@@ -1,6 +1,5 @@
 package br.edu.ufcg.integra_ru.services;
 
-
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Matricula;
@@ -15,9 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 public class UsuarioService {
@@ -37,10 +37,12 @@ public class UsuarioService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public UsuarioResponseDTO createUser(UsuarioDTO usuarioDTO) {
 
         String encodedPassword = this.passwordEncoder.encode(usuarioDTO.getSenha());
-        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false, encodedPassword);
+        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(),
+                usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false, encodedPassword);
 
         Matricula matricula = this.enrollRepository.findById(usuarioDTO.getMatricula())
                 .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Matricula nao encontrada"));
@@ -48,33 +50,38 @@ public class UsuarioService {
         decideUserRole(matricula, userWantsSave);
 
         userWantsSave = this.userRepository.save(userWantsSave);
-        return new UsuarioResponseDTO(userWantsSave.getMatricula(), userWantsSave.getNome(), userWantsSave.getEmail(), userWantsSave.getTelefone(), userWantsSave.getUrlImagem());
+        return new UsuarioResponseDTO(userWantsSave.getMatricula(), userWantsSave.getNome(), userWantsSave.getEmail(),
+                userWantsSave.getTelefone(), userWantsSave.getUrlImagem());
     }
 
+    @Transactional
     public void deleteUser(Usuario usuario) {
         userRepository.delete(usuario);
     }
 
+    @Transactional
     public List<Usuario> listUsers() {
         return userRepository.findAll();
     }
 
+    @Transactional
     public Optional<Usuario> getUserByEnroll(String matricula) {
         return this.userRepository.findById(matricula);
     }
 
-    private void decideUserRole(Matricula matricula, Usuario usuario){
+    @Transactional
+    private void decideUserRole(Matricula matricula, Usuario usuario) {
         Role role;
-        if(matricula.isBeneficiario()){
+        if (matricula.isBeneficiario()) {
             role = this.roleRepository.getReferenceById("BENEFICIARIO");
             usuario.setBeneficiario(true);
-        }
-        else{
+        } else {
             role = this.roleRepository.getReferenceById("EXTERNO");
         }
         usuario.setRole(role);
     }
 
+    @Transactional
     public void addCredit(String matricula, UsuarioDTO userDto) {
         try {
             Usuario userFound = userRepository.getReferenceById(matricula);

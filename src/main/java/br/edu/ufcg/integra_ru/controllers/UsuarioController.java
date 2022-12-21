@@ -1,6 +1,5 @@
 package br.edu.ufcg.integra_ru.controllers;
 
-
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
@@ -23,15 +22,15 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UsuarioDTO usuarioDTO){
+    public ResponseEntity<?> createUser(@RequestBody UsuarioDTO usuarioDTO) {
         UsuarioResponseDTO user = usuarioService.createUser(usuarioDTO);
         return new ResponseEntity<UsuarioResponseDTO>(user, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{matricula}")
-    public ResponseEntity<?> deleteUser(@PathVariable String matricula){
+    public ResponseEntity<?> deleteUser(@PathVariable String matricula) {
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
         usuarioService.deleteUser(user.get());
@@ -39,27 +38,27 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listUsers(){
+    public ResponseEntity<?> listUsers() {
         List<Usuario> users = usuarioService.listUsers();
-        if(users.isEmpty()){
+        if (users.isEmpty()) {
             return new ResponseEntity<>(UserError.errorNenhumUsuarioCadastrado(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{matricula}")
-    public ResponseEntity<?> getUser(@PathVariable String matricula){
+    public ResponseEntity<?> getUser(@PathVariable String matricula) {
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
     @PatchMapping("/{matricula}")
-    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @RequestBody @Valid UsuarioDTO userdto){
+    public ResponseEntity<?> updateCreditUser(@PathVariable String matricula, @RequestBody @Valid UsuarioDTO userdto) {
         Optional<Usuario> user = usuarioService.getUserByEnroll(matricula);
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
         usuarioService.addCredit(matricula, userdto);
