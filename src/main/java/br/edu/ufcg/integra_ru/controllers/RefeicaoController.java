@@ -37,7 +37,12 @@ public class RefeicaoController {
         if(refeicaoService.refeicaoExiste(refeicaoDTO)){
             return RefeicaoError.errorRefeicaoJaCadastrada(refeicaoDTO.getUsuarioMatricula(), refeicaoDTO.getDataReserva());
         }
-        return new ResponseEntity<>(refeicaoService.cadastrarRefeicao(refeicaoDTO), HttpStatus.OK);
+        RefeicaoDTO refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
+        if(!usuarioOptional.get().isBeneficiario()){
+            BigDecimal valor = refeicaoService.getValorRefeicao(refeicao.getRefeicaoID());
+            usuarioService.debitarValor(valor);
+        }
+        return new ResponseEntity<>(refeicao, HttpStatus.OK);
     }
 
     @GetMapping("/refeicoes")
@@ -91,8 +96,6 @@ public class RefeicaoController {
             return RefeicaoError.errorJaFezCheckout(checkoutDTO.getRefeicaoID());
         }
         RefeicaoDTO refeicaoNova = refeicaoService.efetuarCheckout(checkoutDTO);
-        BigDecimal valor = refeicaoService.getValorRefeicao(checkoutDTO.getRefeicaoID());
-        usuarioService.debitarValor(valor);
         return new ResponseEntity<RefeicaoDTO>(refeicaoNova, HttpStatus.OK);
     }
 
