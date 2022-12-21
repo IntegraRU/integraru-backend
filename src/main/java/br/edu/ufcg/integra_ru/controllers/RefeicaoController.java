@@ -2,6 +2,7 @@ package br.edu.ufcg.integra_ru.controllers;
 
 
 import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
+import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
 import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.RefeicaoService;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +64,9 @@ public class RefeicaoController {
         if(refeicaoOptional.isEmpty()){
             return RefeicaoError.errorRefeicaoNaoExiste(id);
         }
+        if(!this.refeicaoService.fezCheckout(id)){
+            return RefeicaoError.errorNaoFezCheckout(id);
+        }
         return new ResponseEntity<>(refeicaoService.avaliarRefeicao(id, avaliacaoDTO), HttpStatus.OK);
     }
 
@@ -74,6 +79,21 @@ public class RefeicaoController {
         refeicaoService.deleteRefeicao(id);
         return new ResponseEntity<>(id, HttpStatus.OK);
 
+    }
+
+    @PutMapping("/checkout")
+    public ResponseEntity<?> checkout(@RequestBody CheckoutDTO checkoutDTO){
+        Optional<RefeicaoDTO> refeicaoOptional = refeicaoService.getRefeicaoById(checkoutDTO.getRefeicaoID());
+        if(refeicaoOptional.isEmpty()){
+            return RefeicaoError.errorRefeicaoNaoExiste(checkoutDTO.getRefeicaoID());
+        }
+        if(this.refeicaoService.fezCheckout(checkoutDTO.getRefeicaoID())){
+            return RefeicaoError.errorJaFezCheckout(checkoutDTO.getRefeicaoID());
+        }
+        RefeicaoDTO refeicaoNova = refeicaoService.efetuarCheckout(checkoutDTO);
+        BigDecimal valor = refeicaoService.getValorRefeicao(checkoutDTO.getRefeicaoID());
+        usuarioService.debitarValor(valor);
+        return new ResponseEntity<RefeicaoDTO>(refeicaoNova, HttpStatus.OK);
     }
 
     //GetRefeicoesDeUsuario
