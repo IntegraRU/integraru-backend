@@ -1,52 +1,67 @@
 package br.edu.ufcg.integra_ru.dtos;
 
-import br.edu.ufcg.integra_ru.models.ModalidadePrato;
-import br.edu.ufcg.integra_ru.models.TipoPrato;
+import br.edu.ufcg.integra_ru.models.Prato;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class RefeicaoDTO {
 
-    private ModalidadePrato modalidadePrato;
+    private String usuarioMatricula;
 
-    private TipoPrato tipo;
+    private LocalDateTime dataReserva;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    private LocalDate data;
+    private int avaliacaoQuant;
 
-    private String usuario;
+    private String avaliacaoComentario;
 
-    public ModalidadePrato getModalidadePrato() {
-        return modalidadePrato;
+    private PratoDTO prato;
+
+    public RefeicaoDTO(String usuarioMatricula, LocalDateTime dataReserva, int avaliacaoQuant, String avaliacaoComentario, PratoDTO prato) {
+        this.usuarioMatricula = usuarioMatricula;
+        this.dataReserva = dataReserva;
+        this.avaliacaoQuant = avaliacaoQuant;
+        this.avaliacaoComentario = avaliacaoComentario;
+        this.prato = prato;
     }
 
-    public void setModalidadePrato(ModalidadePrato modalidadePrato) {
-        this.modalidadePrato = modalidadePrato;
+    public String getUsuarioMatricula() {
+        return usuarioMatricula;
     }
 
-    public TipoPrato getTipo() {
-        return tipo;
+    public void setUsuarioMatricula(String usuarioMatricula) {
+        this.usuarioMatricula = usuarioMatricula;
     }
 
-    public void setTipo(TipoPrato tipo) {
-        this.tipo = tipo;
+    public LocalDateTime getDataReserva() {
+        return dataReserva;
     }
 
-    public LocalDate getData() {
-        return data;
+    public void setDataReserva(LocalDateTime dataReserva) {
+        this.dataReserva = dataReserva;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
+    public int getAvaliacaoQuant() {
+        return avaliacaoQuant;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public void setAvaliacaoQuant(int avaliacaoQuant) {
+        this.avaliacaoQuant = avaliacaoQuant;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public String getAvaliacaoComentario() {
+        return avaliacaoComentario;
+    }
+
+    public void setAvaliacaoComentario(String avaliacaoComentario) {
+        this.avaliacaoComentario = avaliacaoComentario;
+    }
+
+    public PratoDTO getPrato() {
+        return prato;
+    }
+
+    public void setPrato(PratoDTO prato) {
+        this.prato = prato;
     }
 }
