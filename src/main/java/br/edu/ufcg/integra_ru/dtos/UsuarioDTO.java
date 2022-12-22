@@ -1,12 +1,10 @@
 package br.edu.ufcg.integra_ru.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class UsuarioDTO {
-
 
     @NotNull(message = "nome é obrigatório")
     @NotEmpty(message = "nome é obrigatório")
@@ -24,6 +22,8 @@ public class UsuarioDTO {
     private String urlImagem;
 
     private String senha;
+
+    private Double credito;
 
     public String getMatricula() {
         return matricula;
@@ -65,12 +65,20 @@ public class UsuarioDTO {
         this.urlImagem = urlImagem;
     }
 
-//    @JsonIgnore
+    // @JsonIgnore
     public String getSenha() {
         return senha;
     }
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Double getCredito() {
+        return credito;
+    }
+
+    public void setCredito(Double credito) {
+        this.credito = credito;
     }
 }

@@ -1,6 +1,6 @@
 package br.edu.ufcg.integra_ru.services;
 
-
+import br.edu.ufcg.integra_ru.dtos.PatchUserCreditDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Matricula;
@@ -9,16 +9,17 @@ import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.repositories.MatriculaRepository;
 import br.edu.ufcg.integra_ru.repositories.RoleRepository;
 import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
-
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 public class UsuarioService {
@@ -38,10 +39,12 @@ public class UsuarioService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public UsuarioResponseDTO createUser(UsuarioDTO usuarioDTO) {
 
         String encodedPassword = this.passwordEncoder.encode(usuarioDTO.getSenha());
-        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(), usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false, encodedPassword);
+        Usuario userWantsSave = new Usuario(usuarioDTO.getMatricula(), usuarioDTO.getNome(), usuarioDTO.getEmail(),
+                usuarioDTO.getTelefone(), usuarioDTO.getUrlImagem(), false, encodedPassword);
 
         Matricula matricula = this.enrollRepository.findById(usuarioDTO.getMatricula())
                 .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Matricula nao encontrada"));
@@ -49,34 +52,58 @@ public class UsuarioService {
         decideUserRole(matricula, userWantsSave);
 
         userWantsSave = this.userRepository.save(userWantsSave);
-        return new UsuarioResponseDTO(userWantsSave.getMatricula(), userWantsSave.getNome(), userWantsSave.getEmail(), userWantsSave.getTelefone(), userWantsSave.getUrlImagem());
+        return new UsuarioResponseDTO(userWantsSave.getMatricula(), userWantsSave.getNome(), userWantsSave.getEmail(),
+                userWantsSave.getTelefone(), userWantsSave.getUrlImagem());
     }
 
+    @Transactional
     public void deleteUser(Usuario usuario) {
         userRepository.delete(usuario);
     }
 
+    @Transactional
     public List<Usuario> listUsers() {
         return userRepository.findAll();
     }
 
+    @Transactional
     public Optional<Usuario> getUserByEnroll(String matricula) {
         return this.userRepository.findById(matricula);
     }
 
-    private void decideUserRole(Matricula matricula, Usuario usuario){
+    @Transactional
+    private void decideUserRole(Matricula matricula, Usuario usuario) {
         Role role;
-        if(matricula.isBeneficiario()){
-            role = this.roleRepository.getReferenceById("BENEFICIARIO");
+        if (matricula.isBeneficiario()) {
+            role = this.roleRepository.getReferenceById("ROLE_BENEFICIARIO");
             usuario.setBeneficiario(true);
-        }
-        else{
-            role = this.roleRepository.getReferenceById("EXTERNO");
+        } else {
+            role = this.roleRepository.getReferenceById("ROLE_EXTERNO");
         }
         usuario.setRole(role);
     }
 
-    public void debitarValor(BigDecimal valor) {
-        //TODO
+    @Transactional
+    public void addCredit(String matricula, PatchUserCreditDTO userDto) {
+        try {
+
+            Optional<Usuario> userFound = userRepository.findById(matricula);
+            userFound.get().setCredito(userFound.get().getCredito() + userDto.getCredito());
+            userRepository.save(userFound.get());
+        } catch (NullPointerException npen) {
+            throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
+        }
+
+    }
+
+    @Transactional
+    public void debitarValor(String matricula, PatchUserCreditDTO userDto) {
+        try {
+            Optional<Usuario> userFound = userRepository.findById(matricula);
+            userFound.get().setCredito(userFound.get().getCredito() - (userDto.getCredito()));
+            userRepository.save(userFound.get());
+        } catch (NullPointerException npen) {
+            throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
+        }
     }
 }

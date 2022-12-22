@@ -23,10 +23,10 @@ insert into Matricula (valor_matricula, beneficiario) values ('393939999', true)
 insert into Matricula (valor_matricula, beneficiario) values ('493939333', true);
 insert into Matricula (valor_matricula, beneficiario) values ('593939939', true);
 
-insert into tb_role (authority) values ('BENEFICIARIO');
-insert into tb_role (authority) values ('EXTERNO');
-insert into tb_role (authority) values ('ADMINISTRADOR');
-insert into tb_role (authority) values ('NUTRICIONISTA');
+insert into tb_role (authority) values ('ROLE_BENEFICIARIO');
+insert into tb_role (authority) values ('ROLE_EXTERNO');
+insert into tb_role (authority) values ('ROLE_ADMINISTRADOR');
+insert into tb_role (authority) values ('ROLE_NUTRICIONISTA');
 
-insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone) values('username', true, 'usuario@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'BENEFICIARIO', '83983834822');
-insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone) values('admin', true, 'admin@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ADMINISTRADOR', '83983834822');
+insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone) values('username', true, 'usuario@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ROLE_BENEFICIARIO', '83983834822');
+insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone) values('admin', true, 'admin@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ROLE_ADMINISTRADOR', '83983834822');
