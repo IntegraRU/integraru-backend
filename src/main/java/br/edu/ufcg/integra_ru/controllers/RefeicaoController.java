@@ -52,11 +52,7 @@ public class RefeicaoController {
 
     @GetMapping("/refeicoes")
     public ResponseEntity<?> listarRefeicoes(){
-        List<RefeicaoDTO> refeicoes = refeicaoService.listarRefeicoes();
-        if(refeicoes.isEmpty()){
-            return RefeicaoError.errorSemRefeicoes();
-        }
-        return new ResponseEntity<>(refeicoes, HttpStatus.OK);
+        return new ResponseEntity<>(refeicaoService.listarRefeicoes(), HttpStatus.OK);
     }
 
     @GetMapping("/refeicao/{id}")
@@ -105,13 +101,12 @@ public class RefeicaoController {
     }
 
     //GetRefeicoesDeUsuario
-    //Checkout
     //GetAvaliacoesPorPrato
     //
 
-    @GetMapping("/relatorio")
-    public List<RelatorioDTO> getRelatorio(){
-        return relatorioService.gerarRelatorio();
+    @GetMapping("/relatorio/{pratoID}")
+    public ResponseEntity<?> getRelatorio(@PathVariable Long pratoID){
+        return new ResponseEntity<RelatorioDTO>(relatorioService.gerarRelatorio(pratoID), HttpStatus.OK);
     }
 
 }
