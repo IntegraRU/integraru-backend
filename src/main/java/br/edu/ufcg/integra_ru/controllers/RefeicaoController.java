@@ -1,9 +1,6 @@
 package br.edu.ufcg.integra_ru.controllers;
 
-import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
-import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
-import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
-import br.edu.ufcg.integra_ru.dtos.RelatorioDTO;
+import br.edu.ufcg.integra_ru.dtos.*;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.RefeicaoService;
 import br.edu.ufcg.integra_ru.services.RelatorioService;
@@ -45,7 +42,7 @@ public class RefeicaoController {
         RefeicaoDTO refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
         if(!usuarioOptional.get().isBeneficiario()){
             BigDecimal valor = refeicaoService.getValorRefeicao(refeicao.getRefeicaoID());
-            usuarioService.debitarValor(valor);
+            usuarioService.debitarValor(usuarioOptional.get().getMatricula(), new PatchUserCreditDTO(valor.doubleValue()));
         }
         return new ResponseEntity<>(refeicao, HttpStatus.OK);
     }

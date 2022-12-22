@@ -26,7 +26,7 @@ public class RefeicaoService {
 
     public RefeicaoDTO makeDTO(Refeicao refeicao){
         PratoDTO prato = pratoService.getDishById(refeicao.getPratoID());
-        RefeicaoDTO dto = new RefeicaoDTO(refeicao.getId(), refeicao.getMatriculaUser(), refeicao.getDataReserva(), refeicao.getAvaliacaoQuant(), refeicao.getAvaliacaoComentario(), prato);
+        RefeicaoDTO dto = new RefeicaoDTO(refeicao.getId(), refeicao.getMatriculaUser(), refeicao.getNomeUsuario(), refeicao.getDataReserva(), refeicao.getAvaliacaoQuant(), refeicao.getAvaliacaoComentario(), prato);
         if(refeicao.getDataCheckout() != null){
             dto.setDataCheckout(refeicao.getDataCheckout());
         }
@@ -44,7 +44,7 @@ public class RefeicaoService {
     }
 
     public RefeicaoDTO cadastrarRefeicao(RefeicaoDTO refeicaoDTO) {
-        Refeicao refeicao = new Refeicao(refeicaoDTO.getUsuarioMatricula(), refeicaoDTO.getPrato().getId(), refeicaoDTO.getDataReserva());
+        Refeicao refeicao = new Refeicao(refeicaoDTO.getUsuarioMatricula(), refeicaoDTO.getUsuarioNome(), refeicaoDTO.getPrato().getId(), refeicaoDTO.getDataReserva());
         return makeDTO(saveRefeicao(refeicao));
     }
 

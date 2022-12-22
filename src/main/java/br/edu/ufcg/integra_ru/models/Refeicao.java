@@ -18,6 +18,8 @@ public class Refeicao {
 
     private String matriculaUser;
 
+    private String nomeUsuario;
+
     private Long pratoID;
 
     private LocalDateTime dataReserva;
@@ -28,8 +30,9 @@ public class Refeicao {
 
     private String avaliacaoComentario;
 
-    public Refeicao(String matriculaUser, Long pratoID, LocalDateTime dataReserva){
+    public Refeicao(String matriculaUser, String nomeUsuario, Long pratoID, LocalDateTime dataReserva){
         this.matriculaUser = matriculaUser;
+        this.nomeUsuario = nomeUsuario;
         this.dataReserva = dataReserva;
         this.pratoID = pratoID;
     }

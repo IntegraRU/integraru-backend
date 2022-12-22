@@ -82,4 +82,8 @@ public class PratoService {
     public List<PratoDTO> getDishByDateAndType(LocalDate date, ModalidadePrato type) {
         return pratoRepository.findByModalidadePratoAndCardapioData(type, date).stream().map(pratoMapper::toDTO).collect(Collectors.toList());
     }
+
+    public List<PratoDTO> getDishes() {
+        return pratoRepository.findAll().stream().map(pratoMapper::toDTO).collect(Collectors.toList());
+    }
 }

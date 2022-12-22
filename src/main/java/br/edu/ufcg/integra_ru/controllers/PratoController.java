@@ -41,9 +41,14 @@ public class PratoController {
     }
 
     @GetMapping("/pratos")
-    public List<PratoDTO> getDishByDateAndType(@RequestParam(value = "date") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date,
+    public List<PratoDTO> getDishByDateAndType(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date,
                                         @RequestParam(value = "type", required = false) ModalidadePrato type){
         return pratoService.getDishByDateAndType(date, type);
+    }
+
+    @GetMapping("/prato")
+    public List<PratoDTO> getDishes(){
+        return pratoService.getDishes();
     }
 
     @DeleteMapping("/prato/{pratoId}")

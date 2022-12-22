@@ -11,6 +11,8 @@ public class RefeicaoDTO {
 
     private String usuarioMatricula;
 
+    private String usuarioNome;
+
     private LocalDateTime dataReserva;
 
     private LocalDateTime dataCheckout;
@@ -21,9 +23,10 @@ public class RefeicaoDTO {
 
     private PratoDTO prato;
 
-    public RefeicaoDTO(Long refeicaoID, String usuarioMatricula, LocalDateTime dataReserva, int avaliacaoQuant, String avaliacaoComentario, PratoDTO prato) {
+    public RefeicaoDTO(Long refeicaoID, String usuarioMatricula, String usuarioNome, LocalDateTime dataReserva, int avaliacaoQuant, String avaliacaoComentario, PratoDTO prato) {
         this.RefeicaoID = refeicaoID;
         this.usuarioMatricula = usuarioMatricula;
+        this.usuarioNome = usuarioNome;
         this.dataReserva = dataReserva;
         this.avaliacaoQuant = avaliacaoQuant;
         this.avaliacaoComentario = avaliacaoComentario;
@@ -44,6 +47,14 @@ public class RefeicaoDTO {
 
     public void setUsuarioMatricula(String usuarioMatricula) {
         this.usuarioMatricula = usuarioMatricula;
+    }
+
+    public String getUsuarioNome() {
+        return usuarioNome;
+    }
+
+    public void setUsuarioNome(String usuarioNome) {
+        this.usuarioNome = usuarioNome;
     }
 
     public LocalDateTime getDataReserva() {
