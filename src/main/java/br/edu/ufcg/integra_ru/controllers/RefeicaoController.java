@@ -3,8 +3,10 @@ package br.edu.ufcg.integra_ru.controllers;
 import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
 import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
 import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
+import br.edu.ufcg.integra_ru.dtos.RelatorioDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.RefeicaoService;
+import br.edu.ufcg.integra_ru.services.RelatorioService;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
 import br.edu.ufcg.integra_ru.util.RefeicaoError;
 import br.edu.ufcg.integra_ru.util.UserError;
@@ -27,6 +29,9 @@ public class RefeicaoController {
     @Autowired
     UsuarioService usuarioService;
 
+    @Autowired
+    private RelatorioService relatorioService;
+
     @PostMapping("/refeicao")
     public ResponseEntity<?> cadastrarRefeicao(@RequestBody RefeicaoDTO refeicaoDTO) {
         Optional<Usuario> usuarioOptional = usuarioService.getUserByEnroll(refeicaoDTO.getUsuarioMatricula());
@@ -37,16 +42,17 @@ public class RefeicaoController {
             return RefeicaoError.errorRefeicaoJaCadastrada(refeicaoDTO.getUsuarioMatricula(),
                     refeicaoDTO.getDataReserva());
         }
-        return new ResponseEntity<>(refeicaoService.cadastrarRefeicao(refeicaoDTO), HttpStatus.OK);
+        RefeicaoDTO refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
+        if(!usuarioOptional.get().isBeneficiario()){
+            BigDecimal valor = refeicaoService.getValorRefeicao(refeicao.getRefeicaoID());
+            usuarioService.debitarValor(valor);
+        }
+        return new ResponseEntity<>(refeicao, HttpStatus.OK);
     }
 
     @GetMapping("/refeicoes")
-    public ResponseEntity<?> listarRefeicoes() {
-        List<RefeicaoDTO> refeicoes = refeicaoService.listarRefeicoes();
-        if (refeicoes.isEmpty()) {
-            return RefeicaoError.errorSemRefeicoes();
-        }
-        return new ResponseEntity<>(refeicoes, HttpStatus.OK);
+    public ResponseEntity<?> listarRefeicoes(){
+        return new ResponseEntity<>(refeicaoService.listarRefeicoes(), HttpStatus.OK);
     }
 
     @GetMapping("/refeicao/{id}")
@@ -91,14 +97,12 @@ public class RefeicaoController {
             return RefeicaoError.errorJaFezCheckout(checkoutDTO.getRefeicaoID());
         }
         RefeicaoDTO refeicaoNova = refeicaoService.efetuarCheckout(checkoutDTO);
-        BigDecimal valor = refeicaoService.getValorRefeicao(checkoutDTO.getRefeicaoID());
-        // usuarioService.debitarValor();
         return new ResponseEntity<RefeicaoDTO>(refeicaoNova, HttpStatus.OK);
     }
 
-    // GetRefeicoesDeUsuario
-    // Checkout
-    // GetAvaliacoesPorPrato
-    //
+    @GetMapping("/relatorio/{pratoID}")
+    public ResponseEntity<?> getRelatorio(@PathVariable Long pratoID){
+        return new ResponseEntity<RelatorioDTO>(relatorioService.gerarRelatorio(pratoID), HttpStatus.OK);
+    }
 
 }
