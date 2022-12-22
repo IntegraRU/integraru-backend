@@ -7,7 +7,7 @@ public class RelatorioDTO {
 
     private double avaliacaoMedia;
 
-    private List<int> avaliacoesQuant;
+    private List<Integer> avaliacoesQuant;
 
     private List<String> avaliacoesComentarios;
 
@@ -29,11 +29,11 @@ public class RelatorioDTO {
         this.avaliacaoMedia = avaliacaoMedia;
     }
 
-    public List<int> getAvaliacoesQuant() {
+    public List<Integer> getAvaliacoesQuant() {
         return avaliacoesQuant;
     }
 
-    public void setAvaliacoesQuant(List<int> avaliacoesQuant) {
+    public void setAvaliacoesQuant(List<Integer> avaliacoesQuant) {
         this.avaliacoesQuant = avaliacoesQuant;
     }
 
@@ -85,7 +85,7 @@ public class RelatorioDTO {
         this.taxaOptantes = taxaOptantes;
     }
 
-    public RelatorioDTO(double avaliacaoMedia, List<int> avaliacoesQuant, List<String> avaliacoesComentarios, List<LocalDateTime> checkouts, int comensais, double taxaAvaliacao, double taxaComentario, double taxaOptantes) {
+    public RelatorioDTO(double avaliacaoMedia, List<Integer> avaliacoesQuant, List<String> avaliacoesComentarios, List<LocalDateTime> checkouts, int comensais, double taxaAvaliacao, double taxaComentario, double taxaOptantes) {
         this.avaliacaoMedia = avaliacaoMedia;
         this.avaliacoesQuant = avaliacoesQuant;
         this.avaliacoesComentarios = avaliacoesComentarios;
