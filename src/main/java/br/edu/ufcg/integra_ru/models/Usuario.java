@@ -1,9 +1,5 @@
 package br.edu.ufcg.integra_ru.models;
 
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +7,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
-
 
 @Entity
 @Table(name = "usuario")
@@ -39,10 +39,13 @@ public class Usuario implements UserDetails {
 
     private String senha;
 
+    private Double credito;
+
     @ManyToOne
     private Role role;
 
-    public Usuario(String matricula, String nome, String email, String telefone, String urlImagem, boolean beneficiario, String senha) {
+    public Usuario(String matricula, String nome, String email, String telefone, String urlImagem, boolean beneficiario,
+            String senha) {
         this.matricula = matricula;
         this.nome = nome;
         this.email = email;
@@ -50,6 +53,7 @@ public class Usuario implements UserDetails {
         this.urlImagem = urlImagem;
         this.beneficiario = beneficiario;
         this.senha = senha;
+        this.credito = 0.0;
     }
 
     @Override
@@ -85,5 +89,9 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setCredito(Double credito) {
+        this.credito = credito;
     }
 }

@@ -4,7 +4,6 @@ import br.edu.ufcg.integra_ru.dtos.ExcecaoDTO;
 import br.edu.ufcg.integra_ru.services.exceptions.BadRequestExcecao;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +20,18 @@ import java.util.List;
 @RestControllerAdvice
 public class IntegraRuExcecoesController extends ResponseEntityExceptionHandler {
 
-
     @ExceptionHandler(RecursoNaoEncontradoExcecao.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExcecaoDTO notFoundException(RecursoNaoEncontradoExcecao rne){
+    public ExcecaoDTO notFoundException(RecursoNaoEncontradoExcecao rne) {
         return ExcecaoDTO.builder()
                 .mensagem(rne.getMessage())
                 .status(HttpStatus.NOT_FOUND.value())
                 .build();
     }
 
-    @ExceptionHandler({BadRequestExcecao.class, ValueInstantiationException.class})
+    @ExceptionHandler({ BadRequestExcecao.class, ValueInstantiationException.class })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExcecaoDTO CustomBadRequestException(BadRequestExcecao bre){
+    public ExcecaoDTO CustomBadRequestException(BadRequestExcecao bre) {
         return ExcecaoDTO.builder()
                 .mensagem(bre.getMessage())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -41,7 +39,8 @@ public class IntegraRuExcecoesController extends ResponseEntityExceptionHandler 
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> erros = new ArrayList<>();
         exception.getBindingResult().getFieldErrors()
                 .forEach(fieldError -> erros.add(fieldError.getField() + " - " + fieldError.getDefaultMessage()));
