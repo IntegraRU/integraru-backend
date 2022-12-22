@@ -35,5 +35,5 @@ insert into tb_role (authority) values ('ROLE_EXTERNO');
 insert into tb_role (authority) values ('ROLE_ADMINISTRADOR');
 insert into tb_role (authority) values ('ROLE_NUTRICIONISTA');
 
-insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone) values('username', true, 'usuario@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ROLE_BENEFICIARIO', '83983834822');
-insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone) values('admin', true, 'admin@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ROLE_ADMINISTRADOR', '83983834822');
+insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone, credito, url_imagem) values('username', true, 'usuario@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ROLE_BENEFICIARIO', '83983834822', 0.0, '');
+insert into usuario(matricula, beneficiario, email, nome, senha, role_authority, telefone, credito, url_imagem) values('admin', true, 'admin@test.com', 'teste', '$2a$10$xSTD2GboaSR20i5xzmX/EOPvT0x7ZywzFuisOUOwU3Hy4YVTDcqUG' , 'ROLE_ADMINISTRADOR', '83983834822', 0.0, '');
