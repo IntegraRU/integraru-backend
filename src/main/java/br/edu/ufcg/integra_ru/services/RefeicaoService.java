@@ -8,6 +8,9 @@ import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.Refeicao;
 import br.edu.ufcg.integra_ru.repositories.RefeicaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -58,13 +61,8 @@ public class RefeicaoService {
     }
 
 
-    public List<RefeicaoDTO> listarRefeicoes() {
-        List<Refeicao> bundle = refeicaoRepository.findAll();
-        List<RefeicaoDTO> refeicoes = new ArrayList<>();
-        for(Refeicao r : bundle){
-            refeicoes.add(makeDTO(r));
-        }
-        return refeicoes;
+    public Page<RefeicaoDTO> listarRefeicoes(Pageable pageable) {
+        return refeicaoRepository.findAll(pageable).map(refeicao -> makeDTO(refeicao));
     }
 
     public Optional<RefeicaoDTO> getRefeicaoById(Long id) {

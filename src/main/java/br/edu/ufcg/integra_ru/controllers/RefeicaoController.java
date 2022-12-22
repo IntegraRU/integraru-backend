@@ -10,6 +10,9 @@ import br.edu.ufcg.integra_ru.services.UsuarioService;
 import br.edu.ufcg.integra_ru.util.RefeicaoError;
 import br.edu.ufcg.integra_ru.util.UserError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +44,8 @@ public class RefeicaoController {
     }
 
     @GetMapping("/refeicoes")
-    public ResponseEntity<?> listarRefeicoes(){
-        List<RefeicaoDTO> refeicoes = refeicaoService.listarRefeicoes();
+    public ResponseEntity<?> listarRefeicoes(@PageableDefault Pageable pageable){
+        Page<RefeicaoDTO> refeicoes = refeicaoService.listarRefeicoes(pageable);
         if(refeicoes.isEmpty()){
             return RefeicaoError.errorSemRefeicoes();
         }
