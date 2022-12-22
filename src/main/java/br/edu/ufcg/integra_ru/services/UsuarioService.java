@@ -1,6 +1,7 @@
 package br.edu.ufcg.integra_ru.services;
 
 import br.edu.ufcg.integra_ru.dtos.PatchUserCreditDTO;
+import br.edu.ufcg.integra_ru.dtos.PatchUserDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Matricula;
@@ -9,8 +10,10 @@ import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.repositories.MatriculaRepository;
 import br.edu.ufcg.integra_ru.repositories.RoleRepository;
 import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
+import br.edu.ufcg.integra_ru.services.exceptions.NaoAutorizadoExcecao;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -105,5 +108,28 @@ public class UsuarioService {
         } catch (NullPointerException npen) {
             throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
         }
+    }
+
+    @Transactional
+    public UsuarioResponseDTO updateUser(String matricula, PatchUserDTO userDTO) {
+        try {
+            if (matricula.equals(getLoggedUser().getMatricula())) {
+                Usuario usuario = userRepository.getReferenceById(matricula);
+                usuario.setNome(userDTO.getNome());
+                usuario.setTelefone(userDTO.getTelefone());
+                usuario.setEmail(userDTO.getEmail());
+
+                return new UsuarioResponseDTO(matricula, userDTO.getNome(), userDTO.getEmail(),
+                        userDTO.getTelefone(), userDTO.getUrlImagem());
+            }
+        }
+        catch (EntityNotFoundException enfe){
+            throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
+        }
+        throw new NaoAutorizadoExcecao("Não autorizado a modificar este usuário!");
+    }
+
+    private Usuario getLoggedUser(){
+        return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

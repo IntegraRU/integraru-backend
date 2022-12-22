@@ -1,6 +1,7 @@
 package br.edu.ufcg.integra_ru.controllers;
 
 import br.edu.ufcg.integra_ru.dtos.PatchUserCreditDTO;
+import br.edu.ufcg.integra_ru.dtos.PatchUserDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
@@ -82,5 +83,10 @@ public class UsuarioController {
         }
         usuarioService.debitarValor(matricula, userdto);
         return new ResponseEntity<>(matricula, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{matricula}")
+    public UsuarioResponseDTO updateUser(@PathVariable String matricula, @RequestBody @Valid PatchUserDTO userDTO){
+        return usuarioService.updateUser(matricula, userDTO);
     }
 }
