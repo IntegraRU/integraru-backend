@@ -86,9 +86,9 @@ public class UsuarioService {
     public void addCredit(String matricula, UsuarioDTO userDto) {
         try {
 
-            Usuario userFound = userRepository.getReferenceById(matricula);
-            userFound.setCredito(userFound.getCredito() + userDto.getCredito());
-            userRepository.save(userFound);
+            Optional<Usuario> userFound = userRepository.findById(matricula);
+            userFound.get().setCredito(userFound.get().getCredito() + userDto.getCredito());
+            userRepository.save(userFound.get());
         } catch (NullPointerException npen) {
             throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
         }
@@ -98,9 +98,9 @@ public class UsuarioService {
     @Transactional
     public void debitarValor(String matricula, UsuarioDTO userDto) {
         try {
-            Usuario userFound = userRepository.getReferenceById(matricula);
-            userFound.setCredito(userFound.getCredito() - (userDto.getCredito()));
-            userRepository.save(userFound);
+            Optional<Usuario> userFound = userRepository.findById(matricula);
+            userFound.get().setCredito(userFound.get().getCredito() - (userDto.getCredito()));
+            userRepository.save(userFound.get());
         } catch (NullPointerException npen) {
             throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
         }
