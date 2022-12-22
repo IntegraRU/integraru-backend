@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 
 public class UsuarioDTO {
 
-
     @NotNull(message = "nome é obrigatório")
     @NotEmpty(message = "nome é obrigatório")
     private String matricula;
@@ -24,7 +23,7 @@ public class UsuarioDTO {
 
     private String senha;
 
-    private BigDecimal credito;
+    private Double credito;
 
     public String getMatricula() {
         return matricula;
@@ -66,7 +65,7 @@ public class UsuarioDTO {
         this.urlImagem = urlImagem;
     }
 
-//    @JsonIgnore
+    // @JsonIgnore
     public String getSenha() {
         return senha;
     }
@@ -75,8 +74,11 @@ public class UsuarioDTO {
         this.senha = senha;
     }
 
-    public BigDecimal getCredito() { return credito; }
+    public Double getCredito() {
+        return credito;
+    }
 
-    public void setCredito(BigDecimal credito) { this.credito = credito;
+    public void setCredito(Double credito) {
+        this.credito = credito;
     }
 }

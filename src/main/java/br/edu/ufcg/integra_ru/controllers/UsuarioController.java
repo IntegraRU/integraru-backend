@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,7 +73,13 @@ public class UsuarioController {
         if (user.isEmpty()) {
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
-        usuarioService.debitarCredit(matricula, userdto);
+
+        // so vai debitar se o valor que ta no usuario for menor que oq quer debitar
+
+        if (Double.compare(user.get().getCredito(), userdto.getCredito()) < 0) {
+            return new ResponseEntity<>(UserError.errorValorNaoPodeSerDebitado(), HttpStatus.BAD_REQUEST);
+        }
+        usuarioService.debitarValor(matricula, userdto);
         return new ResponseEntity<>(matricula, HttpStatus.OK);
     }
 }

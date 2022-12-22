@@ -1,6 +1,5 @@
 package br.edu.ufcg.integra_ru.models;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
-
 
 @Entity
 @Table(name = "usuario")
@@ -42,12 +40,13 @@ public class Usuario implements UserDetails {
 
     private String senha;
 
-    private BigDecimal credito;
+    private Double credito;
 
     @ManyToOne
     private Role role;
 
-    public Usuario(String matricula, String nome, String email, String telefone, String urlImagem, boolean beneficiario, String senha) {
+    public Usuario(String matricula, String nome, String email, String telefone, String urlImagem, boolean beneficiario,
+            String senha) {
         this.matricula = matricula;
         this.nome = nome;
         this.email = email;
@@ -55,7 +54,7 @@ public class Usuario implements UserDetails {
         this.urlImagem = urlImagem;
         this.beneficiario = beneficiario;
         this.senha = senha;
-        this.credito = new BigDecimal("0.0");
+        this.credito = 0.0;
     }
 
     @Override
@@ -93,7 +92,7 @@ public class Usuario implements UserDetails {
         return true;
     }
 
-    public void setCredito(BigDecimal credito) {
+    public void setCredito(Double credito) {
         this.credito = credito;
     }
 }
