@@ -1,5 +1,6 @@
 package br.edu.ufcg.integra_ru.services;
 
+import br.edu.ufcg.integra_ru.dtos.PatchUserCreditDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioDTO;
 import br.edu.ufcg.integra_ru.dtos.UsuarioResponseDTO;
 import br.edu.ufcg.integra_ru.models.Matricula;
@@ -74,16 +75,16 @@ public class UsuarioService {
     private void decideUserRole(Matricula matricula, Usuario usuario) {
         Role role;
         if (matricula.isBeneficiario()) {
-            role = this.roleRepository.getReferenceById("BENEFICIARIO");
+            role = this.roleRepository.getReferenceById("ROLE_BENEFICIARIO");
             usuario.setBeneficiario(true);
         } else {
-            role = this.roleRepository.getReferenceById("EXTERNO");
+            role = this.roleRepository.getReferenceById("ROLE_EXTERNO");
         }
         usuario.setRole(role);
     }
 
     @Transactional
-    public void addCredit(String matricula, UsuarioDTO userDto) {
+    public void addCredit(String matricula, PatchUserCreditDTO userDto) {
         try {
 
             Optional<Usuario> userFound = userRepository.findById(matricula);
@@ -96,7 +97,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public void debitarValor(String matricula, UsuarioDTO userDto) {
+    public void debitarValor(String matricula, PatchUserCreditDTO userDto) {
         try {
             Optional<Usuario> userFound = userRepository.findById(matricula);
             userFound.get().setCredito(userFound.get().getCredito() - (userDto.getCredito()));
