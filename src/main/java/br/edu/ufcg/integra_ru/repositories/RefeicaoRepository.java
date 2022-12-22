@@ -14,11 +14,4 @@ public interface RefeicaoRepository extends JpaRepository<Refeicao, Long> {
 
     List<Refeicao> findByPratoID(Long pratoID);
 
-    @Query("select count(r) from Refeicao r where r.pratoid = ?1")
-    Long getTotalByPratoId(Long pratoId);
-
-    @Query("select count(r) from Refeicao r where r.dataCheckout is null and r.id = ?1")
-    Long getByPratoIdAndCheckoutDateIsNull(Long pratoId);
-
-
 }

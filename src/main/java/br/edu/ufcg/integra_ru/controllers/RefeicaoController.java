@@ -4,8 +4,10 @@ package br.edu.ufcg.integra_ru.controllers;
 import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
 import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
 import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
+import br.edu.ufcg.integra_ru.dtos.RelatorioDTO;
 import br.edu.ufcg.integra_ru.models.Usuario;
 import br.edu.ufcg.integra_ru.services.RefeicaoService;
+import br.edu.ufcg.integra_ru.services.RelatorioService;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
 import br.edu.ufcg.integra_ru.util.RefeicaoError;
 import br.edu.ufcg.integra_ru.util.UserError;
@@ -27,6 +29,9 @@ public class RefeicaoController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @Autowired
+    private RelatorioService relatorioService;
 
     @PostMapping("/refeicao")
     public ResponseEntity<?> cadastrarRefeicao(@RequestBody RefeicaoDTO refeicaoDTO){
@@ -102,6 +107,11 @@ public class RefeicaoController {
     //GetRefeicoesDeUsuario
     //Checkout
     //GetAvaliacoesPorPrato
-    // 
+    //
+
+    @GetMapping("/relatorio")
+    public List<RelatorioDTO> getRelatorio(){
+        return relatorioService.gerarRelatorio();
+    }
 
 }

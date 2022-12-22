@@ -46,6 +46,9 @@ public class RelatorioService {
         }
 
 
+        if (avaliacoesQuant.size() == 0){
+            return null;
+        }
 
         double media = (double) sumAvaliacoes / avaliacoesQuant.size();
         double taxaAvaliacao = (avaliacoesQuant.size() / (double) comensais) * 100;
@@ -57,8 +60,13 @@ public class RelatorioService {
 
     public List<RelatorioDTO> gerarRelatorio(){
         List<Prato> pratos = pratoRepository.findAll();
-        List<RelatorioDTO> relatorios = Collections.emptyList();
-        pratos.forEach(prato -> relatorios.add(gerarRelatorio(prato.getId())));
+        List<RelatorioDTO> relatorios = new ArrayList<>();
+        pratos.forEach(prato -> {
+            RelatorioDTO relatorioDTO = gerarRelatorio(prato.getId());
+            if(relatorioDTO != null){
+              relatorios.add(relatorioDTO);
+            }
+        });
         return relatorios;
 
     }
