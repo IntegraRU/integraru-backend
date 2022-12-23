@@ -65,7 +65,7 @@ public class RefeicaoController {
     }
 
     @PutMapping("/refeicao/{id}")
-    public ResponseEntity<?> avaliarRefeicao(@PathVariable Long id, AvaliacaoDTO avaliacaoDTO) {
+    public ResponseEntity<?> avaliarRefeicao(@PathVariable Long id, @RequestBody AvaliacaoDTO avaliacaoDTO) {
         Optional<RefeicaoDTO> refeicaoOptional = refeicaoService.getRefeicaoById(id);
         if (refeicaoOptional.isEmpty()) {
             return RefeicaoError.errorRefeicaoNaoExiste(id);
