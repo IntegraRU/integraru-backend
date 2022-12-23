@@ -40,6 +40,7 @@ public class RefeicaoController {
                     refeicaoDTO.getDataReserva());
         }
         RefeicaoDTO refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
+        System.out.println(usuarioOptional.get().isBeneficiario());
         if(!usuarioOptional.get().isBeneficiario()){
             BigDecimal valor = refeicaoService.getValorRefeicao(refeicao.getRefeicaoID());
             System.out.println(usuarioOptional.get().getMatricula());

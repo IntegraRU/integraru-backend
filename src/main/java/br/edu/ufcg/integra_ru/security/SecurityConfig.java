@@ -54,10 +54,10 @@ public class SecurityConfig {
                 .cors().and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> auth
-//                        .antMatchers("/api/login", "/api-docs", "/api/user/**", "/api/prato", "/api/refeicao/**",
-//                                "/api/refeicoes", "/api/checkout")
-//                        .permitAll()
-                        .anyRequest().permitAll())
+                        .antMatchers("/api/login", "/api-docs", "/api/user/**", "/api/prato", "/api/refeicao/**",
+                                "/api/refeicoes", "/api/checkout")
+                        .permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userService)
@@ -77,10 +77,10 @@ public class SecurityConfig {
         return new ProviderManager(authProvider);
     }
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().antMatchers("/h2/**", "/swagger-ui/**", "/v3/api-docs/**");
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/h2/**", "/swagger-ui/**", "/v3/api-docs/**");
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
