@@ -42,6 +42,8 @@ public class RefeicaoController {
         RefeicaoDTO refeicao = refeicaoService.cadastrarRefeicao(refeicaoDTO);
         if(!usuarioOptional.get().isBeneficiario()){
             BigDecimal valor = refeicaoService.getValorRefeicao(refeicao.getRefeicaoID());
+            System.out.println(usuarioOptional.get().getMatricula());
+            System.out.println(valor.doubleValue());
             usuarioService.debitarValor(usuarioOptional.get().getMatricula(), new PatchUserCreditDTO(valor.doubleValue()));
         }
         return new ResponseEntity<>(refeicao, HttpStatus.OK);

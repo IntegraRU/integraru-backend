@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 public enum ModalidadePrato {
     ALMOCO, CAFE, JANTAR;
 
-    private static final double VALOR_ALMOCO = 7;
+    private static final double VALOR_ALMOCO = 10;
 
-    private static final double VALOR_CAFE = 3;
+    private static final double VALOR_CAFE = 5;
 
-    private static final double VALOR_JANTAR = 5;
+    private static final double VALOR_JANTAR = 10;
 
     public BigDecimal getValue() {
         return switch (this) {

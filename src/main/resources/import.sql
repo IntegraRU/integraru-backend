@@ -27,7 +27,7 @@ insert into Matricula (valor_matricula, beneficiario) values ('119210030', true)
 insert into Matricula (valor_matricula, beneficiario) values ('118210644', true);
 insert into Matricula (valor_matricula, beneficiario) values ('118110388', true);
 insert into Matricula (valor_matricula, beneficiario) values ('119210094', true);
-insert into Matricula (valor_matricula, beneficiario) values ('username', true);
+insert into Matricula (valor_matricula, beneficiario) values ('username', false);
 insert into Matricula (valor_matricula, beneficiario) values ('admin', false);
 
 insert into tb_role (authority) values ('ROLE_BENEFICIARIO');
