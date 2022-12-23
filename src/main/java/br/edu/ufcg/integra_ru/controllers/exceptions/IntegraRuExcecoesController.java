@@ -2,6 +2,7 @@ package br.edu.ufcg.integra_ru.controllers.exceptions;
 
 import br.edu.ufcg.integra_ru.dtos.ExcecaoDTO;
 import br.edu.ufcg.integra_ru.services.exceptions.BadRequestExcecao;
+import br.edu.ufcg.integra_ru.services.exceptions.NaoAutorizadoExcecao;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import org.springframework.http.HttpHeaders;
@@ -50,5 +51,14 @@ public class IntegraRuExcecoesController extends ResponseEntityExceptionHandler 
                 .status(HttpStatus.BAD_REQUEST.value())
                 .erros(erros)
                 .build());
+    }
+
+    @ExceptionHandler(NaoAutorizadoExcecao.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ExcecaoDTO notFoundException(NaoAutorizadoExcecao nae) {
+        return ExcecaoDTO.builder()
+                .mensagem(nae.getMessage())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .build();
     }
 }
