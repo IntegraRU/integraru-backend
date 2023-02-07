@@ -13,6 +13,7 @@ import br.edu.ufcg.integra_ru.services.CardapioService;
 import br.edu.ufcg.integra_ru.services.PratoService;
 import br.edu.ufcg.integra_ru.services.RefeicaoService;
 import br.edu.ufcg.integra_ru.services.UsuarioService;
+import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,10 @@ public class PratoControllerTest {
 
     private PratoDTO pratoDTO;
 
+    private Long idInexistente;
+
+    private Long idExistente;
+
     @BeforeEach
     void setUp() {
         pratoDTO = new PratoDTO(1L, TipoPrato.COMUM, ModalidadePrato.ALMOCO, "feijoada", "feijão, linguica, carne de porco", "", null);
@@ -63,14 +68,28 @@ public class PratoControllerTest {
         PratoDTO dtoReturn = new PratoDTO(1L, TipoPrato.COMUM, ModalidadePrato.ALMOCO, "feijoada", "feijão, linguica, carne de porco", "", null);
         pratoDTO.setData(cardapio.getData());
 
+        idInexistente = 10L;
+        idExistente = 1L;
+
         when(service.saveDish(pratoDTO)).thenReturn(dtoReturn);
+
+
+        doThrow(new RecursoNaoEncontradoExcecao("Prato com id " + idInexistente + " não encontrado!"))
+                .when(service).deleteDish(idInexistente);
+
+        doNothing().when(service).deleteDish(idExistente);
+
+        doThrow(new RecursoNaoEncontradoExcecao("Cardápio com o id " + idInexistente + " não encontrado!"))
+                .when(service).getDishById(idInexistente);
+
+        when(service.getDishById(idExistente))
+                .thenReturn(dtoReturn);
     }
 
     @Test
-    void testCadastroComSucesso() throws Exception {
+    void testCadastrarComSucesso() throws Exception {
         String jsonBody = objMapper.writeValueAsString(pratoDTO);
         String expectedName = pratoDTO.getNome();
-        LocalDate expectedDate = pratoDTO.getData();
 
         mockMvc.perform(post(API + "/prato")
                         .content(jsonBody)
@@ -82,8 +101,23 @@ public class PratoControllerTest {
     }
 
     @Test
-    void getDishById() {
+    void testBuscaPratoPorIdValido() throws Exception {
+        mockMvc.perform(get(API + "/prato/" + idExistente)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(pratoDTO.getId()))
+                .andExpect(jsonPath("$.nome").value(pratoDTO.getNome()));
     }
+
+    @Test
+    void testBuscaPratoPorIdInvalido() throws Exception {
+        mockMvc.perform(get(API + "/prato/" + idInexistente)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
 
     @Test
     void getDishByDateAndType() {
@@ -94,7 +128,19 @@ public class PratoControllerTest {
     }
 
     @Test
-    void deleteDish() {
+    void testDeletarPratoInexistente() throws Exception {
+        mockMvc.perform(delete(API + "/prato/" + idInexistente)
+                            .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeletarPratoExistente() throws Exception {
+        mockMvc.perform(delete(API + "/prato/" + idExistente)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
