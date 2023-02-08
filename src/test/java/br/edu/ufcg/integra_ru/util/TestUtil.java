@@ -96,4 +96,20 @@ public class TestUtil {
         return dto;
     }
 
+    public static PatchUserCreditDTO makeRandomPatchUserCredit(){
+        PatchUserCreditDTO dto = new PatchUserCreditDTO();
+        dto.setCredito((double) makeRandomNumber(100));
+        return dto;
+    }
+
+    public static PatchUserDTO makeRandomPatchUser(){
+        PatchUserDTO dto = new PatchUserDTO();
+        dto.setEmail(makeRandomString(15));
+        dto.setNome(makeRandomString(20));
+        dto.setTelefone(makeRandomString(9));
+        dto.setUrlImagem(makeRandomString(20));
+
+        return dto;
+    }
+
 }
