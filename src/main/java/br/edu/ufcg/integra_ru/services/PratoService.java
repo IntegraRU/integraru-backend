@@ -62,15 +62,20 @@ public class PratoService {
             return  pratoMapper.toDTO(found);
         }
         catch (EntityNotFoundException enfe){
-            throw new RecursoNaoEncontradoExcecao("Cardápio com id " + id + " não encontrado!");
+            throw new RecursoNaoEncontradoExcecao("Prato com id " + id + " não encontrado!");
         }
     }
 
     @Transactional
     public PratoDTO patchDish(Long id, PratoDTO dto) {
-        Prato dish = pratoRepository.getReferenceById(id);
-        pratoMapper.updatePratoFromDto(dto, dish);
-        return pratoMapper.toDTO(pratoRepository.save(dish));
+        try {
+            Prato dish = pratoRepository.getReferenceById(id);
+            pratoMapper.updatePratoFromDto(dto, dish);
+            return pratoMapper.toDTO(pratoRepository.save(dish));
+        }
+        catch (EntityNotFoundException enfe){
+            throw new RecursoNaoEncontradoExcecao("Prato com id " + id + " não encontrado!");
+        }
     }
 
     public PratoDTO getDishById(Long id) {
