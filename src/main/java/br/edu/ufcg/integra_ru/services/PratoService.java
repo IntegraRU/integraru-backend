@@ -62,7 +62,7 @@ public class PratoService {
             return  pratoMapper.toDTO(found);
         }
         catch (EntityNotFoundException enfe){
-            throw new RecursoNaoEncontradoExcecao("Cardápio com id " + id + " não encontrado!");
+            throw new RecursoNaoEncontradoExcecao("Prato com id " + id + " não encontrado!");
         }
     }
 

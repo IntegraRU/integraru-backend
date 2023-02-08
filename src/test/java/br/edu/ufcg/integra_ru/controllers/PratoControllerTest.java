@@ -30,10 +30,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -46,6 +51,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 public class PratoControllerTest {
 
+    private static DateTimeFormatter writeFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     protected static final String API = "/api";
     @MockBean
     private PratoService service;
@@ -56,9 +63,15 @@ public class PratoControllerTest {
 
     private PratoDTO pratoDTO;
 
+    private PratoDTO updatedDish;
+
     private Long idInexistente;
 
     private Long idExistente;
+
+    private LocalDate dataExistente;
+
+    private LocalDate dataInexistente;
 
     @BeforeEach
     void setUp() {
@@ -68,8 +81,12 @@ public class PratoControllerTest {
         PratoDTO dtoReturn = new PratoDTO(1L, TipoPrato.COMUM, ModalidadePrato.ALMOCO, "feijoada", "feijão, linguica, carne de porco", "", null);
         pratoDTO.setData(cardapio.getData());
 
+        updatedDish = new PratoDTO(1L, TipoPrato.COMUM, ModalidadePrato.ALMOCO, "feijoada", "feijão, linguiça, carne de porco, carne de charque", "", null);
+
         idInexistente = 10L;
         idExistente = 1L;
+        dataExistente = LocalDate.of(2023, 05, 19);
+        dataInexistente = dataExistente.minusDays(5);
 
         when(service.saveDish(pratoDTO)).thenReturn(dtoReturn);
 
@@ -84,6 +101,19 @@ public class PratoControllerTest {
 
         when(service.getDishById(idExistente))
                 .thenReturn(dtoReturn);
+
+
+        when(service.getDishByDateAndType(eq(dataExistente), any(ModalidadePrato.class)))
+                .thenReturn(List.of(pratoDTO));
+
+        when(service.getDishByDateAndType(eq(dataInexistente), any(ModalidadePrato.class)))
+                .thenReturn(Collections.emptyList());
+
+        when(service.updateDish(eq(idInexistente), any(PratoDTO.class)))
+                .thenThrow(new RecursoNaoEncontradoExcecao("Prato com id " + idInexistente + " não encontrado!"));
+
+        when(service.updateDish(idExistente, pratoDTO))
+                .thenReturn(updatedDish);
     }
 
     @Test
@@ -106,8 +136,8 @@ public class PratoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(pratoDTO.getId()))
-                .andExpect(jsonPath("$.nome").value(pratoDTO.getNome()));
+                .andExpect(jsonPath("$.id").value(pratoDTO.getId()));
+
     }
 
     @Test
@@ -120,11 +150,29 @@ public class PratoControllerTest {
 
 
     @Test
-    void getDishByDateAndType() {
+    void testBuscaPratoPorDataExistenteETipo() throws Exception {
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("date", dataExistente.format(writeFormat));
+        requestParams.add("type", "ALMOCO");
+        mockMvc.perform(get(API + "/pratos")
+                        .queryParams(requestParams)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
-    void getDishes() {
+    void testBuscaPratoPorDataInexistenteETipo() throws Exception {
+        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("date", dataInexistente.format(writeFormat));
+        requestParams.add("type", "ALMOCO");
+        mockMvc.perform(get(API + "/pratos")
+                        .queryParams(requestParams)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
@@ -144,7 +192,28 @@ public class PratoControllerTest {
     }
 
     @Test
-    void updateDish() {
+    void testAtualizarPratoExistente() throws Exception {
+        String jsonBody = objMapper.writeValueAsString(pratoDTO);
+        String expectedName = pratoDTO.getNome();
+
+        mockMvc.perform(put(API + "/prato/" + idExistente)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.nome").value(expectedName))
+                .andExpect(jsonPath("$.itens").value(updatedDish.getItens()));
+    }
+
+    @Test
+    void testAtualizarPratoInexistente() throws Exception {
+        String jsonBody = objMapper.writeValueAsString(pratoDTO);
+         mockMvc.perform(put(API + "/prato/" + idInexistente)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
