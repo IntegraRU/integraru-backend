@@ -65,6 +65,10 @@ public class PratoControllerTest {
 
     private PratoDTO updatedDish;
 
+    private PratoDTO patchedDish;
+
+    private PratoDTO toPatch;
+
     private Long idInexistente;
 
     private Long idExistente;
@@ -82,6 +86,10 @@ public class PratoControllerTest {
         pratoDTO.setData(cardapio.getData());
 
         updatedDish = new PratoDTO(1L, TipoPrato.COMUM, ModalidadePrato.ALMOCO, "feijoada", "feijão, linguiça, carne de porco, carne de charque", "", null);
+
+        patchedDish =  new PratoDTO(1L, TipoPrato.COMUM, ModalidadePrato.ALMOCO, "feijoada", "feijão, linguiça, carne de porco, bacon", "", null);
+        toPatch = new PratoDTO();
+        toPatch.setItens("feijão, linguiça, carne de porco, bacon");
 
         idInexistente = 10L;
         idExistente = 1L;
@@ -114,6 +122,12 @@ public class PratoControllerTest {
 
         when(service.updateDish(idExistente, pratoDTO))
                 .thenReturn(updatedDish);
+
+        when(service.patchDish(idExistente, toPatch))
+                .thenReturn(patchedDish);
+
+        when(service.patchDish(eq(idInexistente), any(PratoDTO.class)))
+                .thenThrow(new RecursoNaoEncontradoExcecao("Prato com id " + idInexistente + " não encontrado!"));
     }
 
     @Test
@@ -217,6 +231,26 @@ public class PratoControllerTest {
     }
 
     @Test
-    void patchDish() {
+    void testAtualizarPratoExistenteParcialmente() throws Exception {
+        String jsonBody = objMapper.writeValueAsString(toPatch);
+        mockMvc.perform(patch(API + "/prato/" + idExistente)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itens").value(patchedDish.getItens()));
+
     }
+
+    @Test
+    void testAtualizarPratoInexistenteParcialmente() throws Exception {
+        String jsonBody = objMapper.writeValueAsString(toPatch);
+        mockMvc.perform(patch(API + "/prato/" + idInexistente)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
 }
