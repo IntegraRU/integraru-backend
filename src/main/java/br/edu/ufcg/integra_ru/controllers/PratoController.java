@@ -43,6 +43,9 @@ public class PratoController {
     @GetMapping("/pratos")
     public List<PratoDTO> getDishByDateAndType(@RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date,
                                         @RequestParam(value = "type", required = false) ModalidadePrato type){
+        if (date == null) {
+            return pratoService.getDishes();
+        }
         return pratoService.getDishByDateAndType(date, type);
     }
 
