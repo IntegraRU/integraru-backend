@@ -45,15 +45,12 @@ public class RelatorioService {
             }
         }
 
+        double media = (double) sumAvaliacoes / sizeOr1(avaliacoesQuant);
+        double taxaAvaliacao = (avaliacoesQuant.size() / (double) return1If0(comensais)) * 100;
+        double taxaComentario = (avaliacoesComentario.size() / (double) return1If0(comensais)) * 100;
 
-        if (avaliacoesQuant.size() == 0){
-            return null;
-        }
-
-        double media = (double) sumAvaliacoes / avaliacoesQuant.size();
-        double taxaAvaliacao = (avaliacoesQuant.size() / (double) comensais) * 100;
-        double taxaComentario = (avaliacoesComentario.size() / (double) comensais) * 100;
-        double taxaOptantes = ((double) refeicoes.size() / (refeicaoRepository.findAll().size()) * 100);
+        int numRefeicoesTotais = refeicaoRepository.findAll().size();
+        double taxaOptantes = ((double) refeicoes.size() / (return1If0(numRefeicoesTotais)) * 100);
 
         return new RelatorioDTO(media, avaliacoesQuant, avaliacoesComentario, checkouts, comensais, taxaAvaliacao, taxaComentario, taxaOptantes);
     }
@@ -69,5 +66,14 @@ public class RelatorioService {
         });
         return relatorios;
 
+    }
+
+    private<T> int sizeOr1(List<T> list) {
+        if(list == null) return 1;
+        return list.size() != 0 ? list.size() : 1;
+    }
+
+    private int return1If0(int value){
+        return value == 0 ? 1 : value;
     }
 }
