@@ -13,6 +13,7 @@ import br.edu.ufcg.integra_ru.repositories.UsuarioRepository;
 import br.edu.ufcg.integra_ru.services.exceptions.NaoAutorizadoExcecao;
 import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,9 +74,7 @@ public class UsuarioService {
     public Optional<Usuario> getUserByEnroll(String matricula) {
         return this.userRepository.findById(matricula);
     }
-
-    @Transactional
-    private void decideUserRole(Matricula matricula, Usuario usuario) {
+    private void decideUserRole(Matricula matricula, Usuario usuario) throws EmptyResultDataAccessException {
         Role role;
         if (matricula.isBeneficiario()) {
             role = this.roleRepository.getReferenceById("ROLE_BENEFICIARIO");
@@ -131,5 +130,10 @@ public class UsuarioService {
 
     private Usuario getLoggedUser(){
         return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+
+    public void atualizarRoleUsuario(Matricula matricula) throws EmptyResultDataAccessException{
+        decideUserRole(matricula, userRepository.getReferenceById(matricula.getValorMatricula()));
     }
 }
