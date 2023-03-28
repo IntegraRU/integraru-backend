@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,10 +29,16 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true
+)
 public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userService;
+
+    @Autowired
+    private AcessoNegadoHandler acessoNegadoHandler;
 
     @Value("${cors.origins}")
     private String corsOrigins;
@@ -62,6 +69,9 @@ public class SecurityConfig {
                                 "/api/refeicoes", "/api/checkout")
                         .permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling()
+                .accessDeniedHandler(acessoNegadoHandler)
+                .and()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userService)
