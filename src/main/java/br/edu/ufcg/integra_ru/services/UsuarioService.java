@@ -81,6 +81,7 @@ public class UsuarioService {
             usuario.setBeneficiario(true);
         } else {
             role = this.roleRepository.getReferenceById("ROLE_EXTERNO");
+            usuario.setBeneficiario(false);
         }
         usuario.setRole(role);
     }
