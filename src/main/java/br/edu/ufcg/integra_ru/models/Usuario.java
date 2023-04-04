@@ -94,4 +94,8 @@ public class Usuario implements UserDetails {
     public void setCredito(Double credito) {
         this.credito = credito;
     }
+
+    public void addCredito(Double credito){
+        this.credito += credito;
+    }
 }

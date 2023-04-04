@@ -137,4 +137,11 @@ public class UsuarioService {
     public void atualizarRoleUsuario(Matricula matricula) throws EmptyResultDataAccessException{
         decideUserRole(matricula, userRepository.getReferenceById(matricula.getValorMatricula()));
     }
+
+    public void devolverCredito(String matricula) {
+        Usuario usuario = getUserByEnroll(matricula)
+                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuario com a matrícula: " + matricula + " não encontrado"));
+
+        usuario.addCredito(10.0);
+    }
 }
