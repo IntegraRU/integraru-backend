@@ -1,5 +1,6 @@
 package br.edu.ufcg.integra_ru.dtos;
 
+import br.edu.ufcg.integra_ru.models.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,11 @@ public class UsuarioResponseDTO {
 
     private String urlImagem;
 
+    public UsuarioResponseDTO(Usuario entity) {
+        this.matricula = entity.getMatricula();
+        this.nome = entity.getNome();
+        this.email = entity.getEmail();
+        this.telefone = entity.getTelefone();
+        this.urlImagem = entity.getUrlImagem();
+    }
 }

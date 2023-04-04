@@ -43,7 +43,7 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<?> listUsers() {
-        List<Usuario> users = usuarioService.listUsers();
+        List<UsuarioResponseDTO> users = usuarioService.listUsers();
         if (users.isEmpty()) {
             return new ResponseEntity<>(UserError.errorNenhumUsuarioCadastrado(), HttpStatus.BAD_REQUEST);
         }
@@ -56,7 +56,7 @@ public class UsuarioController {
         if (user.isEmpty()) {
             return new ResponseEntity<>(UserError.errorUsuarioNaoCadastrado(matricula), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        return new ResponseEntity<>(new UsuarioResponseDTO(user.get()), HttpStatus.OK);
     }
 
     @PatchMapping("/{matricula}/add-credit")

@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -66,8 +67,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<Usuario> listUsers() {
-        return userRepository.findAll();
+    public List<UsuarioResponseDTO> listUsers() {
+        return userRepository.findAll().stream().map(UsuarioResponseDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
