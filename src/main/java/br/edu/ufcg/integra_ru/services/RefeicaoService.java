@@ -4,12 +4,14 @@ import br.edu.ufcg.integra_ru.dtos.AvaliacaoDTO;
 import br.edu.ufcg.integra_ru.dtos.CheckoutDTO;
 import br.edu.ufcg.integra_ru.dtos.PratoDTO;
 import br.edu.ufcg.integra_ru.dtos.RefeicaoDTO;
-import br.edu.ufcg.integra_ru.models.ModalidadePrato;
 import br.edu.ufcg.integra_ru.models.Refeicao;
 import br.edu.ufcg.integra_ru.repositories.RefeicaoRepository;
+import br.edu.ufcg.integra_ru.services.exceptions.RecursoNaoEncontradoExcecao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,9 @@ public class RefeicaoService {
 
     @Autowired
     PratoService pratoService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     public RefeicaoDTO makeDTO(Refeicao refeicao){
         PratoDTO prato = pratoService.getDishById(refeicao.getPratoID());
@@ -52,9 +57,20 @@ public class RefeicaoService {
         return refeicaoRepository.save(refeicao);
     }
 
+    @Transactional
     public void deleteRefeicao(Long idRefeicao){
-        Optional<Refeicao> refeicaoOptional = refeicaoRepository.findById(idRefeicao);
-        refeicaoOptional.ifPresent(refeicao -> refeicaoRepository.delete(refeicao));
+        try{
+            Optional<Refeicao> refeicaoOptional = refeicaoRepository.findById(idRefeicao);
+            refeicaoOptional.ifPresent(refeicao -> {
+                String matricula = refeicao.getMatriculaUser();
+                usuarioService.devolverCredito(matricula);
+                refeicaoRepository.delete(refeicao);
+            });
+        }
+        catch (EmptyResultDataAccessException epda){
+            throw new RecursoNaoEncontradoExcecao("Refeição com id: " + idRefeicao + "não encontrada");
+
+        }
     }
 
 

@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -66,8 +67,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    public List<Usuario> listUsers() {
-        return userRepository.findAll();
+    public List<UsuarioResponseDTO> listUsers() {
+        return userRepository.findAll().stream().map(UsuarioResponseDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -136,5 +137,12 @@ public class UsuarioService {
 
     public void atualizarRoleUsuario(Matricula matricula) throws EmptyResultDataAccessException{
         decideUserRole(matricula, userRepository.getReferenceById(matricula.getValorMatricula()));
+    }
+
+    public void devolverCredito(String matricula) {
+        Usuario usuario = getUserByEnroll(matricula)
+                .orElseThrow(() -> new RecursoNaoEncontradoExcecao("Usuario com a matrícula: " + matricula + " não encontrado"));
+
+        usuario.addCredito(10.0);
     }
 }
