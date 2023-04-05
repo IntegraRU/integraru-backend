@@ -75,6 +75,7 @@ public class UsuarioService {
     public Optional<Usuario> getUserByEnroll(String matricula) {
         return this.userRepository.findById(matricula);
     }
+
     private void decideUserRole(Matricula matricula, Usuario usuario) throws EmptyResultDataAccessException {
         Role role;
         if (matricula.isBeneficiario()) {
@@ -123,19 +124,18 @@ public class UsuarioService {
                 return new UsuarioResponseDTO(matricula, userDTO.getNome(), userDTO.getEmail(),
                         userDTO.getTelefone(), userDTO.getUrlImagem());
             }
-        }
-        catch (EntityNotFoundException enfe){
+        } catch (EntityNotFoundException enfe) {
             throw new RecursoNaoEncontradoExcecao("Usuário com matricula " + matricula + " não encontrado!");
         }
         throw new NaoAutorizadoExcecao("Não autorizado a modificar este usuário!");
     }
 
-    private Usuario getLoggedUser(){
+    private Usuario getLoggedUser() {
         return (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 
-    public void atualizarRoleUsuario(Matricula matricula) throws EmptyResultDataAccessException{
+    public void atualizarRoleUsuario(Matricula matricula) throws EmptyResultDataAccessException {
         decideUserRole(matricula, userRepository.getReferenceById(matricula.getValorMatricula()));
     }
 

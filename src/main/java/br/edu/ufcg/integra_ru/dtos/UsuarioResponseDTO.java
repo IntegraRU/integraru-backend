@@ -33,4 +33,12 @@ public class UsuarioResponseDTO {
         this.credito = entity.getCredito();
         this.beneficiario = entity.isBeneficiario();
     }
+
+    public UsuarioResponseDTO(String matricula, String nome, String email, String telefone, String urlImagem) {
+        this.matricula = matricula;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.urlImagem = urlImagem;
+    }
 }
