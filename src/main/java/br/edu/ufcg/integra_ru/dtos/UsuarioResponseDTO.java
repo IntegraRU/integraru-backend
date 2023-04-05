@@ -20,11 +20,17 @@ public class UsuarioResponseDTO {
 
     private String urlImagem;
 
+    private Double credito;
+
+    private boolean beneficiario;
+
     public UsuarioResponseDTO(Usuario entity) {
         this.matricula = entity.getMatricula();
         this.nome = entity.getNome();
         this.email = entity.getEmail();
         this.telefone = entity.getTelefone();
         this.urlImagem = entity.getUrlImagem();
+        this.credito = entity.getCredito();
+        this.beneficiario = entity.isBeneficiario();
     }
 }
