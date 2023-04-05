@@ -58,7 +58,7 @@ public class UsuarioService {
 
         userWantsSave = this.userRepository.save(userWantsSave);
         return new UsuarioResponseDTO(userWantsSave.getMatricula(), userWantsSave.getNome(), userWantsSave.getEmail(),
-                userWantsSave.getTelefone(), userWantsSave.getUrlImagem());
+                userWantsSave.getTelefone(), userWantsSave.getUrlImagem(), userWantsSave.getCredito(), userWantsSave.isBeneficiario());
     }
 
     @Transactional
