@@ -44,8 +44,16 @@ public class Usuario implements UserDetails {
     @ManyToOne
     private Role role;
 
+    public Usuario(String matricula, String nome, String email, String telefone, String urlImagem) {
+        this.matricula = matricula;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.urlImagem = urlImagem;
+    }
+
     public Usuario(String matricula, String nome, String email, String telefone, String urlImagem, boolean beneficiario,
-            String senha) {
+                   String senha) {
         this.matricula = matricula;
         this.nome = nome;
         this.email = email;

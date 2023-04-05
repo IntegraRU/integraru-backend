@@ -83,9 +83,9 @@ public class UsuarioControllerTest extends AbstractTestClass {
 
     @Test
     void testListarUsuariosSemUsuarios() throws Exception{
-        List<Usuario> users = usuarioService.listUsers();
-        for(Usuario u: users){
-            usuarioService.deleteUser(u);
+        List<UsuarioResponseDTO> users = usuarioService.listUsers();
+        for(UsuarioResponseDTO u: users){
+            usuarioService.deleteUser(new Usuario(u.getMatricula(), u.getNome(), u.getEmail(), u.getTelefone(), u.getUrlImagem()));
         }
 
         mockMvc.perform(get(API)
